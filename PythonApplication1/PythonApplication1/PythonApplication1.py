@@ -14,7 +14,7 @@ def test():
         elif 'message' in item:
             print('{} ({})'.format(item['message'], item['code']))
     '''
-    r = api.request('statuses/filter', {'track':'pizza'})
+    r = api.request('statuses/filter', {'track':'microsoft'})
     for item in r.get_iterator():
         if 'text' in item:
             print(item['text'].encode('utf-8'))
