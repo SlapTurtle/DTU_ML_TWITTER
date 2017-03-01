@@ -1,5 +1,6 @@
 #import tensorflow as tf
 from TwitterAPI import TwitterAPI
+import datetime
 
 def test():
     consumer_key = 'o5aaDQNePqeOwLJpXFC1qeWmL'
@@ -14,8 +15,11 @@ def test():
         elif 'message' in item:
             print('{} ({})'.format(item['message'], item['code']))
     '''
-    r = api.request('statuses/filter', {'track':'microsoft'})
+    r = api.request('statuses/filter', {'track':{'Bill Gates', }})
     for item in r.get_iterator():
+        '''if 'created_at' in item:
+            print(item['created_at'])            
+            print(datetime.datetime.now())'''
         if 'text' in item:
             print(item['text'].encode('utf-8'))
 

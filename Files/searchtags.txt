@@ -1,0 +1,54 @@
+Microsoft
+Windows
+Windows10
+Windows7
+Windows8
+WindowsVista
+Windows Vista
+WindowsXP
+Windows XP
+Outlook
+OneNote
+PowerPoint
+MicrosoftEdge
+Bing
+OneDrive
+Lumia
+WindowsServer
+Windows Server
+WindowsPhone
+Windows Phone
+MicrosoftDynamics
+Microsoft Dynamics
+MSDC
+Hotmail
+MSN
+Surface
+SurfacePro
+BillGates
+Bill Gates
+Office
+Office365
+MSFT
+Azure
+VS2013
+VS2015
+VS2017
+Windows
+Xbox
+X-box
+XboxOne
+Xbox360
+Kinect
+InternetExplorer
+Internet Explorer
+IE
+Skype
+Nokia
+NOK
+Linkedin
+LNKD
+VisualStudio
+Visual Studio
+MS-DOS
+TechNet
