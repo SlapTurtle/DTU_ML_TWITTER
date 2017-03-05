@@ -1,5 +1,0 @@
-[Fri Mar 03 15:02:51 +0000 2017] b"RT @UnitedWayKC: $142M. That's what @msphilanthropic donated to charities in '16. Honored to be a major recipient. https://t.co/r5HT9WzrqK\xe2\x80\xa6"
-[Fri Mar 03 15:02:51 +0000 2017] b'RT @sonycomeback: $AAPL $FB $GOOGL $NKE $MSFT $AMZN $SNAP trade 4x-23x book value with that multiple $SNE #SONY should trade btw $80\xe2\x80\xa6 '
-[Fri Mar 03 15:02:51 +0000 2017] b'\xe2\x80\x9cCommitted to Windows Phone\xe2\x80\x9d: Windows 10 Mobile Slow Ring Updated After 105\xc2\xa0Days https://t.co/2qSRUUTF9R'
-[Fri Mar 03 15:02:53 +0000 2017] b'RT @pskkartheek: @CodessForum: where powerful stories of motivation, drive, and pursuit of excellence are shared among #womenintech!\xe2\x80\xa6 '
-[Fri Mar 03 15:02:55 +0000 2017] b'RT @ddlabar: #EarlyBoundGenerator Fixed! Apparently Microsoft had an issue with their NuGet Package for CrmSrvcUtil.  Download 1.2017.3.3 t\xe2\x80\xa6'

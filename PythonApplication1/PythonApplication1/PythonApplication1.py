@@ -25,7 +25,12 @@ def directorySkip(s=DATA_PATH):
     return None
 
 def getSearchTags():
-    return directorySkip() + SEARCHTAG_PATH
+    path = directorySkip() + SEARCHTAG_PATH
+    tags = set()
+    with open(path, "r") as file:
+        for line in file:
+            tags.add(line[:-1])
+    return tags
 
 def getDataPath(s):
     path = directorySkip() + s[-4:]+s[4:7]+s[8:10]+'.txt' #fixed string index's
@@ -37,21 +42,33 @@ def readData(t):
     path = ''
     searchTags = getSearchTags()
     r = api.request('statuses/filter', {'track':searchTags, 'language':{'en'}})
-
+    printStatus(searchTags, r.status_code)
     for item in r.get_iterator():
         if 'created_at' and 'text' in item:
             path = getDataPath(item['created_at'])
             s = '[{}] {}\n'.format(item['created_at'], item['text'].encode('utf-8'))
             with open(path, "a") as file:
                 file.write(s)
+            print(s[:-1])
         else:
             print(item)
         if(not t.isAlive()):
             break
-    print("stopping data")
+    print("-----------------------")
+    print("Stopping data...")
+
+def printStatus(s,t):
+    t = t + " - good!" if t == str(200) else t
+    print("-----------------------")
+    print("Searchtags are:")
+    print(s)
+    print("-----------------------")
+    print("Status is: {}".format(t))
+    print("-----------------------")
+    print("Downloading Tweets...")
+    print("-----------------------")
 
 def getInput():
-    print("start")
     input()
 
 if __name__ == '__main__':
