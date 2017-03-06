@@ -3,8 +3,8 @@ from TwitterAPI import TwitterAPI
 import datetime
 import os
 from threading import Thread
+import time
 
-#kmmen
 consumer_key = 'o5aaDQNePqeOwLJpXFC1qeWmL'
 consumer_secret = 'TM8g6A7GveM5wkZahV8ZgILYGHJcChVNVJblAEn6ZdL9gLCVnA'
 access_token_key = '3688759636-pYAsFBCIAFphzdwvNZjrbcydWFLZ2NFogRybaGc'
@@ -38,32 +38,71 @@ def getDataPath(s):
     return path
 
 def readData(t):
+    ''' Code assistance: https://github.com/geduldig/TwitterAPI/blob/master/docs/ '''
     api = TwitterAPI(consumer_key, consumer_secret, access_token_key, access_token_secret)
-    path = ''
     searchTags = getSearchTags()
-    r = api.request('statuses/filter', {'track':searchTags, 'language':{'en'}})
-    printStatus(searchTags, r.status_code)
-    for item in r.get_iterator():
-        if 'created_at' and 'text' in item:
-            path = getDataPath(item['created_at'])
-            s = '[{}] {}\n'.format(item['created_at'], item['text'].encode('utf-8'))
-            with open(path, "a") as file:
-                file.write(s)
-            print(s[:-1])
-        else:
-            print(item)
-        if(not t.isAlive()):
-            break
-    print("-----------------------")
-    print("Stopping data...")
-
-def printStatus(s,t):
-    t = t + " - good!" if t == str(200) else t
+    
     print("-----------------------")
     print("Searchtags are:")
-    print(s)
+    print(searchTags)
+
+    timerCount = 1
+    while (t.isAlive()):
+        try:
+            r = api.request('statuses/filter', {'track':searchTags, 'language':{'en'}})
+            printStatus(r.status_code)
+            for item in r.get_iterator():
+                if 'created_at' and 'text' in item:
+                    timerCount = 1
+                    path = getDataPath(item['created_at'])
+                    s = '[{}] {}\n'.format(item['created_at'], item['text'].encode('utf-8'))
+                    with open(path, "a") as file:
+                        file.write(s)
+                    #print(s[:-1])
+                elif 'disconnect' in item:
+                    print("-----------------------")
+                    print('Disconnected because {}'.format(item['disconnect']['reason']))
+                    event = item['disconnect']
+                    if event['code'] in [2,5,6,7]:
+                        # something needs to be fixed before re-connecting
+                        raise Exception(event['reason'])
+                    else:
+                        # temporary interruption, re-try request
+                        wait(timerCount)
+                        timerCount *= 2
+                        break
+                if not t.isAlive():
+                    # program ended by user
+                    break
+        except TwitterRequestError as e:
+            if e.status_code < 500:
+                # something needs to be fixed before re-connecting
+                raise
+            else:
+                # temporary interruption, re-try request
+                wait(timerCount)
+                timerCount *= 2
+                pass
+        except TwitterConnectionError:
+            # temporary interruption, re-try request
+            wait(timerCount)
+            timerCount *= 2
+            pass
+
     print("-----------------------")
-    print("Status is: {}".format(t))
+    print("Stopping data retrieval:")
+    print("-----------------------")
+
+def wait(timerCount):
+    print("-----------------------")
+    print("Disconnected, attempting to reconnect in {} seconds...".format(str(timerCount*60)))
+    print("")
+    time.sleep(timerCount*60)
+
+def printStatus(s):
+    stat = (str(s) + " - good!") if (s == 200) else str(s)
+    print("-----------------------")
+    print("Status is: {}".format(stat))
     print("-----------------------")
     print("Downloading Tweets...")
     print("-----------------------")
