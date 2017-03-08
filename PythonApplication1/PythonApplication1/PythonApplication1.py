@@ -6,6 +6,7 @@ from threading import Thread
 import time
 from semantics import *
 from preprocessing import *
+from searchPosNeg import *
 
 consumer_key = 'o5aaDQNePqeOwLJpXFC1qeWmL'
 consumer_secret = 'TM8g6A7GveM5wkZahV8ZgILYGHJcChVNVJblAEn6ZdL9gLCVnA'
@@ -116,7 +117,8 @@ def getInput():
     input()
 
 if __name__ == '__main__':
-    process()
+    #process()
+    test(directorySkip())
     #semantics()
     #t = Thread(target = getInput)
     #t2 = Thread(target = readData, args={t})

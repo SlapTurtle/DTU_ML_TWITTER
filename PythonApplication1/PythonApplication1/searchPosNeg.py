@@ -99,18 +99,18 @@ class searchClass:
             for line in file:
                 self.tree.add(line[:-1], posneg)
 
-    def addPositives(self):
-        path = directorySkip() + POSPATH
+    def addPositives(self, dir):
+        path = dir + POSPATH
         self.addWords(path, True)
 
-    def addNegatives(self):
-        path = directorySkip() + NEGPATH
+    def addNegatives(self, dir):
+        path = dir + NEGPATH
         self.addWords(path, False)
 
-def test():
+def test(dir):
     t = searchClass()
-    t.addPositives()
-    t.addNegatives()
+    t.addPositives(dir)
+    t.addNegatives(dir)
     list = ["cool", "zombie", "smojoho", "koalabear"]
     print("-------------")
     for s in t.tree.getAllWords(): print(s + ":" + str(t.tree.search(s)))
