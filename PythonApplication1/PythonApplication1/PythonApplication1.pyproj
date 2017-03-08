@@ -22,6 +22,9 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="searchPosNeg.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="preprocessing.py" />
     <Compile Include="PythonApplication1.py" />
   </ItemGroup>
