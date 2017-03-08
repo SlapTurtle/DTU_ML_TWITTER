@@ -3,7 +3,8 @@ from TwitterAPI import TwitterAPI
 import datetime
 import os
 
-#kmmen
+from preprocessing import preprocessor
+
 consumer_key = 'o5aaDQNePqeOwLJpXFC1qeWmL'
 consumer_secret = 'TM8g6A7GveM5wkZahV8ZgILYGHJcChVNVJblAEn6ZdL9gLCVnA'
 access_token_key = '3688759636-pYAsFBCIAFphzdwvNZjrbcydWFLZ2NFogRybaGc'
@@ -49,4 +50,5 @@ def readData():
                 myfile.write(s)
 
 if __name__ == '__main__':
-    readData()
+    #readData()
+    proc = preprocessor
