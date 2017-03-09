@@ -4,6 +4,9 @@ import datetime
 import os
 from threading import Thread
 import time
+from semantics import *
+from preprocessing import *
+from searchPosNeg import *
 
 consumer_key = 'o5aaDQNePqeOwLJpXFC1qeWmL'
 consumer_secret = 'TM8g6A7GveM5wkZahV8ZgILYGHJcChVNVJblAEn6ZdL9gLCVnA'
@@ -32,8 +35,11 @@ def getSearchTags():
             tags.add(line[:-1])
     return tags
 
+def translateDate(s):
+    return s[-4:]+s[4:7]+s[8:10]
+
 def getDataPath(s):
-    path = directorySkip() + s[-4:]+s[4:7]+s[8:10]+'.txt' #fixed string index's
+    path = directorySkip() + s +'.txt' #fixed string index's
     open('myfile.dat', 'w+').close()
     return path
 
@@ -54,7 +60,7 @@ def readData(t):
             for item in r.get_iterator():
                 if 'created_at' and 'text' in item:
                     timerCount = 1
-                    path = getDataPath(item['created_at'])
+                    path = getDataPath(translateDate(item['created_at']))
                     s = '[{}] {}\n'.format(item['created_at'], item['text'].encode('utf-8'))
                     with open(path, "a") as file:
                         file.write(s)
@@ -111,9 +117,12 @@ def getInput():
     input()
 
 if __name__ == '__main__':
-    t = Thread(target = getInput)
-    t2 = Thread(target = readData, args={t})
-    t.start()
-    t2.start()
-    t.join()
-    t2.join()
+    #process()
+    test(directorySkip())
+    #semantics()
+    #t = Thread(target = getInput)
+    #t2 = Thread(target = readData, args={t})
+    #t.start()
+    #t2.start()
+    #t.join()
+    #t2.join()
