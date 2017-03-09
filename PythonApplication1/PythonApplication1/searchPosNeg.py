@@ -1,11 +1,11 @@
-from PythonApplication1 import *
+import PythonApplication1 as main
 
-POSPATH = 'positives.txt'
-NEGPATH = 'negatives.txt'
+POSPATH = 'positives'
+NEGPATH = 'negatives'
+
+DEFAULT_ALPH = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','\-','\+']
 
 class trie():
-    DEFAULT_ALPH = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','-','+']
-
     def __init__(self, a=DEFAULT_ALPH):
         self.alph = a
         self.root = node(self.alph, '', 0)
@@ -19,7 +19,8 @@ class trie():
             if not curr.hasChild(c):
                 curr.addChild(c)
             curr = curr.getChild(c)
-        if curr.hasWord() != None: raise Exception("Tree already has a the {} word ,\"{}\", assigned".format("positive" if curr.hasWord() else "negative", s))
+        if curr.hasWord() != None:
+            raise Exception("Tree already has a the {} word ,\"{}\", assigned".format("positive" if curr.hasWord() else "negative", s))
         return curr.addWord(posneg)
 
     def search(self, s):
@@ -90,29 +91,28 @@ class node():
     def hasWord(self):
         return self.word
 
-class searchClass:
-    def __init__(self):
-        self.tree = trie()
+def addWords(t, path, posneg):
+    with open(path, "r") as file:
+        for line in file:
+            t.add(line[:-1], posneg)
 
-    def addWords(self, path, posneg):
-        with open(path, "r") as file:
-            for line in file:
-                self.tree.add(line[:-1], posneg)
+def addPositives(t):
+    path = main.getDataPath(POSPATH)
+    addWords(t, path, True)
 
-    def addPositives(self, dir):
-        path = dir + POSPATH
-        self.addWords(path, True)
+def addNegatives(t):
+    path = main.getDataPath(NEGPATH)
+    addWords(t, path, False)
 
-    def addNegatives(self, dir):
-        path = dir + NEGPATH
-        self.addWords(path, False)
-
-def test(dir):
-    t = searchClass()
-    t.addPositives(dir)
-    t.addNegatives(dir)
-    list = ["cool", "zombie", "smojoho", "koalabear"]
+def getSearchTrie():
+    t = trie()
+    addPositives(t)
+    addNegatives(t)
+    '''
+    list = ["cool", "zombie", "koala"]
     print("-------------")
-    for s in t.tree.getAllWords(): print(s + ":" + str(t.tree.search(s)))
+    for s in t.getAllWords(): print(s + ":" + str(t.search(s)))
     print("-------------")
-    for s in list: print(s +":"+ str(t.tree.search(s)))
+    for s in list: print(s + ":" + str(t.search(s)))
+    '''
+    return t
