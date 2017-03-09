@@ -11,11 +11,8 @@ class trie():
         self.root = node(self.alph, '', 0)
 
     def add(self, s, posneg):
-        w = s + " "
         curr = self.root
-        while(w != " "):
-            c = w[0]
-            w = w[1:]
+        for c in s.lower():
             if not curr.hasChild(c):
                 curr.addChild(c)
             curr = curr.getChild(c)
@@ -24,11 +21,8 @@ class trie():
         return curr.addWord(posneg)
 
     def search(self, s):
-        w = s.lower() + " "
         curr = self.root
-        while(w != " "):
-            c = w[0]
-            w = w[1:]
+        for c in s.lower():
             curr = curr.getChild(c)
             if curr is None:
                 return None
@@ -37,18 +31,18 @@ class trie():
     def getAllWords(self):
         list = []
         stack = []
-        w = []
+        w = "$"
         stack.insert(0, self.root)
         while(len(stack) != 0):
             curr = stack.pop()
-            if(curr.getDepth() <= len(w) - 1):
+            if(curr.getDepth() <= len(w)-1):
                 w = w[:curr.getDepth()]
-            w.append(curr.getKey())
+            w = w + curr.getKey()
             if curr.hasChildren():
                 for d,node in curr.getChildren().items():
                     stack.append(node)
             if curr.hasWord() != None:
-                list.append(''.join(w))
+                list.append(w[1:])
         return list
 
 class node():
@@ -108,11 +102,11 @@ def getSearchTrie():
     t = trie()
     addPositives(t)
     addNegatives(t)
-    '''
+    
     list = ["cool", "zombie", "koala"]
     print("-------------")
     for s in t.getAllWords(): print(s + ":" + str(t.search(s)))
     print("-------------")
     for s in list: print(s + ":" + str(t.search(s)))
-    '''
+    
     return t

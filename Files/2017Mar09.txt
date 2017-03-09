@@ -2979,3 +2979,4 @@
 [Thu Mar 09 01:54:08 +0000 2017] b'AWS Microsoft AD simplifies on-premises user sign-in to the AWS Management Console https://t.co/1guOTQULzi \xf0\x9f\x97\xa3#Opines on #DevOps'
 [Thu Mar 09 01:55:34 +0000 2017] b'@realDonaldTrump @ABC @CBSNews @WhiteHouse @Harvard felony for all and lawsuits city astoria warrenton cop ilwaco Microsoft internet phone'
 [Thu Mar 09 01:55:39 +0000 2017] b'Announcing Azure SQL Database Premium RS, 4TB storage options, and enhanced portal experience https://t.co/qvMYShyepY'
+[Thu Mar 09 02:44:25 +0000 2017] b'This is going be a great event for Azure AD https://t.co/kXfvtl0EdK'
