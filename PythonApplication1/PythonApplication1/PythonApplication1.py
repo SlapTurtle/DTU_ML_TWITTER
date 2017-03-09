@@ -90,7 +90,7 @@ def readData(t):
             pass
 
     print("-----------------------")
-    print("Stopping data retrieval:")
+    print("Stopping data retrieval")
     print("-----------------------")
 
 def wait(timerCount):
