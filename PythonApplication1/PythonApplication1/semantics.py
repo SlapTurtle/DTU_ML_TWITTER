@@ -1,22 +1,31 @@
 from PythonApplication1 import *
 from preprocessing import *
 
-FILE = "testdata"
+FILE = "2017Mar08"
 POSITIVES = []
 NEGATIVES = []
 
 def semantics():
-    global POSITIVE, NEGATIVES
+    global POSITIVES, NEGATIVES
     print("Running Semantics...")
     data = open(getDataPath(FILE))
     POSITIVES = set(loadLexicon("positives"))
     NEGATIVES = set(loadLexicon("negatives"))
 
+    positives = 0
+    negatives = 0
+
     for line in data:
         result = evaluate(line)
-        print(result)
+        if result > 0:
+            positives = positives + 1
+        elif result < 0:
+            negatives = negatives + 1
         #filedump(evaluate(line))
 
+    print("Positives: " + str(positives))
+    print("Negatives: " + str(negatives))
+    print("Overall score: " + str(positives - negatives))
 
 def evaluate(line):
     list = line.split()
