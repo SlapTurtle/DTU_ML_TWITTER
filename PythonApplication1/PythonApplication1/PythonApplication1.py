@@ -1,5 +1,6 @@
 #import tensorflow as tf
 import os
+from analysis import *
 from semantics import *
 from preprocessing import *
 from searchPosNeg import *
@@ -25,5 +26,5 @@ def getDataPath(s):
 if __name__ == '__main__':
     #process()
     #getSearchTrie()
-    startData()
-    #semantics()
+    #startData()
+    analysis()

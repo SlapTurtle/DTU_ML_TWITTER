@@ -51,8 +51,11 @@ def tokenize(string):
         tokenized[i] = tokenized[i].translate(no_digits)
         word = tokenized[i]
         if (word == "https"):
-            for j in range(0,4):
-                tokenized.pop(i)
+            try:
+                for j in range(0,4):
+                    tokenized.pop(i)
+            except:
+                pass
         elif (len(word) < 2) or (len(word) <= 3 and word[0] == 'x') or (word == "rt"):
             tokenized.pop(i)
         else:

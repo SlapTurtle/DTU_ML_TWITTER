@@ -1,31 +1,42 @@
 from PythonApplication1 import *
 from preprocessing import *
+from time import time
+from searchPosNeg import *
+#from tensorflow import *
 
-FILE = "2017Mar08"
+FILE = ""
 POSITIVES = []
 NEGATIVES = []
+TRIE = []
 
-def semantics():
-    global POSITIVES, NEGATIVES
-    print("Running Semantics...")
+def semantics(s):
+    global POSITIVES, NEGATIVES, FILE, TRIE
+    FILE = s
     data = open(getDataPath(FILE))
     POSITIVES = set(loadLexicon("positives"))
     NEGATIVES = set(loadLexicon("negatives"))
 
+    #TRIE = getSearchTrie()
+
+    time_start = time()
     positives = 0
     negatives = 0
 
     for line in data:
-        result = evaluate(line)
-        if result > 0:
-            positives = positives + 1
-        elif result < 0:
-            negatives = negatives + 1
-        #filedump(evaluate(line))
+        try:
+            result = evaluate(line)
+            if result > 0:
+                positives = positives + 1
+            elif result < 0:
+                negatives = negatives + 1
+        except:
+            pass
 
+    time_finish = time()
+    print("\nFinished in " + str(time_finish - time_start)[:4] + "s with the following result:")
     print("Positives: " + str(positives))
     print("Negatives: " + str(negatives))
-    print("Overall score: " + str(positives - negatives))
+    print("Overall score: " + str(positives - negatives) + "\n")
 
 def evaluate(line):
     list = line.split()
@@ -34,6 +45,11 @@ def evaluate(line):
     total = len(list)
 
     for word in list:
+        #search = TRIE.search(word)
+        #if search == True:
+        #    positives = positives + 1
+        #elif search == False:
+        #    negatives = negatives + 1
         if word in POSITIVES:
             positives = positives + 1
         elif word in NEGATIVES:
