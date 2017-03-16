@@ -1,6 +1,7 @@
 import PythonApplication1 as main
 from TwitterAPI import *
 from threading import Thread
+from time import *
 
 consumer_key = 'o5aaDQNePqeOwLJpXFC1qeWmL'
 consumer_secret = 'TM8g6A7GveM5wkZahV8ZgILYGHJcChVNVJblAEn6ZdL9gLCVnA'

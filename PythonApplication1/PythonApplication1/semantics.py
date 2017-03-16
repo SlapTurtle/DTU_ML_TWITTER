@@ -2,7 +2,6 @@ from PythonApplication1 import *
 from preprocessing import *
 from time import time
 from searchPosNeg import *
-#from tensorflow import *
 
 FILE = ""
 POSITIVES = []
@@ -21,6 +20,7 @@ def semantics(s):
     time_start = time()
     positives = 0
     negatives = 0
+    total = 0
 
     for line in data:
         try:
@@ -29,13 +29,15 @@ def semantics(s):
                 positives = positives + 1
             elif result < 0:
                 negatives = negatives + 1
+            total = total + 1
         except:
             pass
 
     time_finish = time()
     print("\nFinished in " + str(time_finish - time_start)[:4] + "s with the following result:")
-    print("Positives: " + str(positives))
-    print("Negatives: " + str(negatives))
+    print("Positives: " + str(positives) + " (" + str((positives/total)*100)[:4] + "%)")
+    print("Negatives: " + str(negatives) + " (" + str((negatives/total)*100)[:4] + "%)")
+    print("Total tweets: " + str(total))
     print("Overall score: " + str(positives - negatives) + "\n")
 
 def evaluate(line):

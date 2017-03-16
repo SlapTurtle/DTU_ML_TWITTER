@@ -26,5 +26,5 @@ def getDataPath(s):
 if __name__ == '__main__':
     #process()
     #getSearchTrie()
-    #startData()
-    analysis()
+    startData()
+    #analysis()
