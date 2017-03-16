@@ -103,10 +103,4 @@ def getSearchTrie():
     addPositives(t)
     addNegatives(t)
     
-    list = ["cool", "zombie", "koala"]
-    print("-------------")
-    for s in t.getAllWords(): print(s + ":" + str(t.search(s)))
-    print("-------------")
-    for s in list: print(s + ":" + str(t.search(s)))
-    
     return t

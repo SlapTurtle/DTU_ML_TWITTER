@@ -2,7 +2,8 @@ import re
 from string import digits
 from PythonApplication1 import *
 
-FILE = "2017Mar06"
+FILE = "2017Mar08"
+DATA_PATH = 'Files\\'
 
 # HUSK: at undgå split ved '-'
 
@@ -50,8 +51,11 @@ def tokenize(string):
         tokenized[i] = tokenized[i].translate(no_digits)
         word = tokenized[i]
         if (word == "https"):
-            for j in range(0,4):
-                tokenized.pop(i)
+            try:
+                for j in range(0,4):
+                    tokenized.pop(i)
+            except:
+                pass
         elif (len(word) < 2) or (len(word) <= 3 and word[0] == 'x') or (word == "rt"):
             tokenized.pop(i)
         else:
@@ -75,3 +79,18 @@ def filedump(s):
     dp = getDataPath(FILE)[:-4] + "_p.txt"
     with open(dp, "a") as file:
         file.write(s)
+
+def getDataPath(s):
+    path = directorySkip() + s +'.txt'
+    return path
+
+def directorySkip(s=DATA_PATH):
+    path = os.path.dirname(os.path.abspath(__file__))
+    if type(path) == str:
+        i,j = len(path),0
+        while (j!=2):
+            i = i-1
+            if path[i] == '\\':
+                j = j + 1
+        return path[0:i+1] + s
+    return None
