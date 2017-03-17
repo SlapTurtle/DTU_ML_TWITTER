@@ -50,13 +50,13 @@ def tokenize(string):
         no_digits = str.maketrans('', '', digits)
         tokenized[i] = tokenized[i].translate(no_digits)
         word = tokenized[i]
-        if (word == "https"):
+        if (word == "https" or word == "nhttps"):
             try:
                 for j in range(0,4):
                     tokenized.pop(i)
             except:
                 pass
-        elif (len(word) < 2) or (len(word) <= 3 and word[0] == 'x') or (word == "rt"):
+        elif (len(word) < 1) or (len(word) <= 3 and word[0] == 'x') or (word == "rt"):
             tokenized.pop(i)
         else:
             i = i + 1
