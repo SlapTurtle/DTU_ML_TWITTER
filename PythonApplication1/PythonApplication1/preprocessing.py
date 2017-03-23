@@ -1,17 +1,19 @@
 import re
 from string import digits
 from PythonApplication1 import *
+from time import time
 
-FILE = "2017Mar08"
+FILE = "2017Mar16"
 DATA_PATH = 'Files\\'
 
 # HUSK: at undgå split ved '-'
 
 def process():
+    time_start = time()
     data = open(getDataPath(FILE))
     clearfile()
 
-    recent = ["", "", "", "", ""]
+    recent = ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""]
     index = 0
 
     for line in data:
@@ -25,8 +27,6 @@ def process():
                 spam = True
                 break
         if not spam:
-            print(result)
-            print("\n")
             filedump(result + "\n")
             recent[index] = result
             if (1 + index < len(recent)):
@@ -34,9 +34,13 @@ def process():
             else:
                 index = 0
 
+    time_end = time()
+    print("Processed " + FILE + " in " + (str)(time_end - time_start)[:4] + "s")
+
 
 # get text from data string
 def get_text(string):
+    string = string.replace('\"', "'", 1)
     date, text = string.split("'", 1)
     return text[:-1]
 

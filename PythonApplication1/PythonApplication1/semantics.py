@@ -3,23 +3,26 @@ from nltk.corpus import brown
 from PythonApplication1 import *
 from preprocessing import *
 from time import time
-from searchPosNeg import *
 
 FILE = ""
-POSITIVES = []
-NEGATIVES = []
-TRIE = []
+POSITIVES = set()
+NEGATIVES = set()
+SEARCHTAGS = set()
+VERBS = set()
+
 
 def semantics(s):
-    global POSITIVES, NEGATIVES, FILE, TRIE
+    global POSITIVES, NEGATIVES, FILE, SEARCHTAGS, VERBS
     FILE = s
     data = open(getDataPath(FILE))
     POSITIVES = set(loadLexicon("positives"))
     NEGATIVES = set(loadLexicon("negatives"))
+    SEARCHTAGS = getSearchTags()
+    VERBS.add("VBG")
+    VERBS.add("VB")
+    VERBS.add("VBZ")
 
     evaluation = []
-    #TRIE = getSearchTrie()
-
     time_start = time()
     positives = 0
     negatives = 0
@@ -38,11 +41,11 @@ def semantics(s):
             pass
 
     time_finish = time()
-    print("\nFinished in " + str(time_finish - time_start)[:4] + "s with the following result:")
+    print("\nFinished in " + str(time_finish - time_start)[:4] + "s with the following result:\n")
     print("Positives: " + str(positives) + " (" + str((positives/total)*100)[:4] + "%)")
     print("Negatives: " + str(negatives) + " (" + str((negatives/total)*100)[:4] + "%)")
     print("Total tweets: " + str(total))
-    print("Overall score: " + str(positives - negatives))
+    print("Overall score: " + str(positives - negatives) + "\n")
     return evaluation
 
 def evaluate(line):
@@ -51,12 +54,9 @@ def evaluate(line):
     negatives = 0
     total = len(list)
 
+
+
     for word in list:
-        #search = TRIE.search(word)
-        #if search == True:
-        #    positives = positives + 1
-        #elif search == False:
-        #    negatives = negatives + 1
         if word in POSITIVES:
             positives = positives + 1
         elif word in NEGATIVES:
@@ -66,13 +66,12 @@ def evaluate(line):
 
 
 def identify(s):
-    print("Analysing: " + s)
+    print("Analysing: " + str(s))
     tokens = nltk.word_tokenize(s)
     tagged = nltk.pos_tag(tokens)
-    entities = nltk.chunk.ne_chunk(tagged)
-    object = nltk.tagstr2tree(entities, 'JJ').label()
-    print(object)
-    return s
+
+    print(tagged)
+    return tagged
 
 
 def loadLexicon(s):

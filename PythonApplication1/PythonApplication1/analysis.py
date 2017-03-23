@@ -9,7 +9,7 @@ def analysis():
     res = analyze(FILE + "_p")
     accuracy(res)
     print("\n")
-    #identify("If I had to pick between microsoft and apple, the former would win, hands down")
+    #identify("I hate Apple, because Microsoft has better products")
 
 
 def full_analysis():
@@ -22,16 +22,13 @@ def analyze(s):
 
 
 def accuracy(data):
-    #data = open(getDataPath(FILE + "_p"))
     manual = open(getDataPath(FILE + "_s"))
-
     correct = 0
     total = 0
-
     m_pos = 0
     m_neg = 0
-
     i = 0
+
     for line in manual:
         if int(line) > 0:
             m_pos = m_pos + 1
