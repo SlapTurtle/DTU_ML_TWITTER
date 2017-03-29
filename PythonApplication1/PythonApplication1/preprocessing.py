@@ -13,7 +13,7 @@ def process():
     data = open(getDataPath(FILE))
     clearfile()
 
-    recent = ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""]
+    recent = [""] * 60
     index = 0
 
     for line in data:
