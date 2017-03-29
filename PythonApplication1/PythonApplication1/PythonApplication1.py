@@ -5,6 +5,7 @@ from semantics import *
 from preprocessing import *
 from searchPosNeg import *
 from dataGathering import *
+from BagOfWords import *
 
 DATA_PATH = 'Files\\'
 
@@ -24,6 +25,7 @@ def getDataPath(s):
     return path
 
 if __name__ == '__main__':
-    process()
+    #process()
     #startData()
     #analysis()
+    testLex()
