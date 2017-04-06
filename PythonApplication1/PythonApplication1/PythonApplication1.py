@@ -5,6 +5,7 @@ from semantics import *
 from preprocessing import *
 from searchPosNeg import *
 from dataGathering import *
+from bagofwords import *
 
 DATA_PATH = 'Files\\'
 
@@ -24,7 +25,8 @@ def getDataPath(s):
     return path
 
 if __name__ == '__main__':
-    parseSet()
+    #parseSet()
     #process()
     #startData()
     #analysis()
+    train_neural_network()
