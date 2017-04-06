@@ -243,3 +243,6 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+/Files/SentimentAnalysisDataset.csv
+/Files/SentimentAnalysisDataset.txt
+/Files/SentimentAnalysisDataset_p.txt

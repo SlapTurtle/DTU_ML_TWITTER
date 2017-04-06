@@ -24,6 +24,7 @@ def getDataPath(s):
     return path
 
 if __name__ == '__main__':
-    process()
+    parseSet()
+    #process()
     #startData()
     #analysis()

@@ -8,19 +8,15 @@ FILE = ""
 POSITIVES = set()
 NEGATIVES = set()
 SEARCHTAGS = set()
-VERBS = set()
 
 
 def semantics(s):
-    global POSITIVES, NEGATIVES, FILE, SEARCHTAGS, VERBS
+    global POSITIVES, NEGATIVES, FILE, SEARCHTAGS
     FILE = s
     data = open(getDataPath(FILE))
     POSITIVES = set(loadLexicon("positives"))
     NEGATIVES = set(loadLexicon("negatives"))
     SEARCHTAGS = getSearchTags()
-    VERBS.add("VBG")
-    VERBS.add("VB")
-    VERBS.add("VBZ")
 
     evaluation = []
     time_start = time()

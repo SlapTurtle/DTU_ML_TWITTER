@@ -25,6 +25,7 @@
     <Compile Include="analysis.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="bagofwords.py" />
     <Compile Include="dataGathering.py">
       <SubType>Code</SubType>
     </Compile>
