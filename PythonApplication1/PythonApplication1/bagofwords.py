@@ -8,14 +8,13 @@ from collections import Counter
 BAG OF WORDS - TODO: IMPROVE PREPROCESS
 '''
 
-FILE = "SentimentAnalysisDataset"
-DATA_PATH = 'Files\\'
+FILE_pos = "ds_pos_p"
+FILE_neg = "ds_neg_p"
 
 lexicon = []
 
 def make_Lexicon(allLines):
-    global lexicon
-    upper,lower = 1000,50 #Optimize this
+    upper,lower = 1000000,0 #Optimize this
 
     retLex = []
     tmpLex = []
@@ -24,13 +23,17 @@ def make_Lexicon(allLines):
         words = line.replace('\n','').split(' ')
         for word in words:
             tmpLex.append(word)
+
+    print(len(tmpLex))
+
     count = Counter(tmpLex)
     for word in count:
         if upper > count[word] > lower:
             retLex.append(word)
 
-    lexicon = retLex
-    return lexicon
+    print(len(retLex))
+
+    return retLex
 
 def make_singleSample(line, lexicon, classification):
     feature = np.zeros(len(lexicon))
@@ -41,11 +44,21 @@ def make_singleSample(line, lexicon, classification):
             feature[index] += 1
     return [feature, classification]
 
-def make_lexicon_and_Samples(posLines,negLines,testSize=0.1):
-    global lexicon
-    make_Lexicon(posLines+negLines)
+def make_lexicon_and_Samples(testSize=0.1):
+    posLines = []
+    negLines = []
 
-    print(lexicon)
+    with open(getDataPath(FILE_pos), "r") as f:
+        for line in f:
+            posLines.append(line)
+            
+    with open(getDataPath(FILE_pos), "r") as f:
+        for line in f:
+            negLines.append(line)
+
+    global lexicon
+    lexicon = make_Lexicon(posLines+negLines)
+    #print(lexicon)
     
     features = []
     for line in posLines:
@@ -66,38 +79,12 @@ def make_lexicon_and_Samples(posLines,negLines,testSize=0.1):
 
     return train_x,train_y,test_x,test_y
 
-def testLex(file=FILE):
-    posLines = []
-    negLines = []
-
-    with open(file, "r") as f:
-        k,max = 0,10000
-        for line in f:
-            line = str(line).replace('\n','')
-
-            i,j = 0,0
-            pos = None
-            while(j<3):
-                if(line[i] == ','):
-                    j += 1
-                    if(j == 1):
-                        pos = (line[i+1] == '1')                 
-                i += 1
-            if pos:
-                posLines.append(line[i:])
-            else:                
-                negLines.append(line[i:])
-
-            k += 1
-            if k > max : break
-
-    return make_lexicon_and_Samples(posLines,negLines)
-
 '''
 NEURAL NETWORK - TODO: IMPROVE ACCURACY
 '''
 
-train_x,train_y,test_x,test_y = testLex()
+
+train_x,train_y,test_x,test_y = make_lexicon_and_Samples()
 size = len(train_x[0])
 
 n_nodes_hl1 = 500
