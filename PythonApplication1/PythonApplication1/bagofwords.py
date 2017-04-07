@@ -14,7 +14,7 @@ FILE_neg = "ds_neg_p"
 lexicon = []
 
 def make_Lexicon(allLines):
-    upper,lower = 1000000,0 #Optimize this
+    upper,lower = 1000,50 #Optimize this
 
     retLex = []
     tmpLex = []
@@ -48,28 +48,43 @@ def make_lexicon_and_Samples(testSize=0.1):
     posLines = []
     negLines = []
 
+    print("start")
+    
+    print("read posfile")
     with open(getDataPath(FILE_pos), "r") as f:
         for line in f:
             posLines.append(line)
-            
-    with open(getDataPath(FILE_pos), "r") as f:
+    print(len(posLines))
+    
+    print("readnegfile")
+    with open(getDataPath(FILE_neg), "r") as f:
         for line in f:
             negLines.append(line)
+    print(len(negLines))
 
+    print("make lexicon")
     global lexicon
     lexicon = make_Lexicon(posLines+negLines)
     #print(lexicon)
     
     features = []
+    
+    print("pos features")
     for line in posLines:
         features.append(make_singleSample(line, lexicon, [1,0]))
+    
+    print("neg features")
     for line in negLines:
         features.append(make_singleSample(line, lexicon, [0,1]))
     
+    print("shuffle")
     r.shuffle(features)
+    print("to array")
     features = np.array(features)
 
-    testingSize = int(testSize*len(features))
+    print("tests")
+    #testingSize = int(testSize*len(features))
+    testingSize = 20000
 
     train_x = list(features[:,0][:-testingSize])
     train_y = list(features[:,1][:-testingSize])
@@ -77,6 +92,7 @@ def make_lexicon_and_Samples(testSize=0.1):
     test_x = list(features[:,0][-testingSize:])
     test_y = list(features[:,1][-testingSize:])
 
+    print("returns")
     return train_x,train_y,test_x,test_y
 
 '''
