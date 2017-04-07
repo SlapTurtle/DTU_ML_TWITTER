@@ -70,12 +70,20 @@ def make_lexicon_and_Samples(testSize=0.1):
     features = []
     
     print("pos features")
+    k = 0
     for line in posLines:
         features.append(make_singleSample(line, lexicon, [1,0]))
+        k += 1
+        if k % int(len(posLines) / 100) == 0:
+            print(str(int(k / 100)) + "%o")
     
+    k = 0
     print("neg features")
     for line in negLines:
         features.append(make_singleSample(line, lexicon, [0,1]))
+        k += 1
+        if k % int(len(negLines) / 100) == 0:
+            print(str(int(k / 100)) + "%o")
     
     print("shuffle")
     r.shuffle(features)
