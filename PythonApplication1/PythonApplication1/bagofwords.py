@@ -14,7 +14,7 @@ FILE_neg = "ds_neg_p"
 lexicon = []
 
 def make_Lexicon(allLines):
-    upper,lower = 1000000,0 #Optimize this
+    upper,lower = 1000,50 #Optimize this
 
     retLex = []
     tmpLex = []
@@ -69,7 +69,8 @@ def make_lexicon_and_Samples(testSize=0.1):
     r.shuffle(features)
     features = np.array(features)
 
-    testingSize = int(testSize*len(features))
+    #testingSize = int(testSize*len(features))
+    testingSize = 10000
 
     train_x = list(features[:,0][:-testingSize])
     train_y = list(features[:,1][:-testingSize])
