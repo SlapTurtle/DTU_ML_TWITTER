@@ -14,7 +14,8 @@ def parseSet(file = "SentimentAnalysisDataset"):
     time_start = time()
     print("Parsing set . . .")
     with open(getDataPath(file), "r", encoding='utf8') as f:
-        k, max = 0, 20000
+        #k, max = 0, 100000
+        k = 0
         for line in f:
             line = str(line.encode('utf-8')).replace('\n','')
             i,j = 0,0
@@ -33,9 +34,9 @@ def parseSet(file = "SentimentAnalysisDataset"):
 
 
             if k % 1000 == 0:
-                print("Finished " + str(k) + " of " + str(max))
-            if k == max:
-                break
+                print("Finished " + str(k))
+            #if k == max:
+             #   break
     time_end = time()
     print("Processed " + FILE + " in " + (str)(time_end - time_start)[:4] + "s")
 
