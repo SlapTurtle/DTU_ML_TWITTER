@@ -5,7 +5,7 @@ import tensorflow as tf
 from collections import Counter
 
 '''
-BAG OF WORD - TODO: IMPROVE PREPROCESS
+BAG OF WORDS - TODO: IMPROVE PREPROCESS
 '''
 
 FILE = "SentimentAnalysisDataset"
