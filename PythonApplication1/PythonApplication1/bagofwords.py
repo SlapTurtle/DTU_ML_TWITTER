@@ -1,5 +1,6 @@
 import numpy as np
 import random as r
+import sys
 from preprocessing import *
 import tensorflow as tf
 from collections import Counter
@@ -11,12 +12,10 @@ BAG OF WORDS - TODO: IMPROVE PREPROCESS
 FILE_pos = "ds_pos_p"
 FILE_neg = "ds_neg_p"
 
-lexicon = []
-
 def make_Lexicon(allLines):
     upper,lower = 1000,50 #Optimize this
 
-    retLex = []
+    retLex = dict()
     tmpLex = []
 
     for line in allLines:
@@ -27,9 +26,11 @@ def make_Lexicon(allLines):
     print(len(tmpLex))
 
     count = Counter(tmpLex)
+    i = 0
     for word in count:
         if upper > count[word] > lower:
-            retLex.append(word)
+            retLex[word] = i
+            i += 1
 
     print(len(retLex))
 
@@ -40,7 +41,7 @@ def make_singleSample(line, lexicon, classification):
     words = line.replace('\n','').split(' ')
     for word in words:
         if word in lexicon:
-            index = lexicon.index(word) #O(n)
+            index = lexicon[word]
             feature[index] += 1
     return [feature, classification]
 
@@ -56,37 +57,41 @@ def make_lexicon_and_Samples(testSize=0.1):
             posLines.append(line)
     print(len(posLines))
     
-    print("readnegfile")
+    print("read negfile")
     with open(getDataPath(FILE_neg), "r") as f:
         for line in f:
             negLines.append(line)
     print(len(negLines))
 
     print("make lexicon")
-    global lexicon
     lexicon = make_Lexicon(posLines+negLines)
     #print(lexicon)
-    
+
     features = []
-    
+    percent = 100
+
     print("pos features")
     k = 0
+    print("    0 %", end='\r')
     for line in posLines:
         features.append(make_singleSample(line, lexicon, [1,0]))
         k += 1
-        if k % int(len(posLines) / 100) == 0:
-            print(str(int(k / 100)) + "%o")
-    
-    k = 0
+        if k % int(len(posLines) / percent) == 0:
+            print("    " + str((int(k*100 / len(posLines))+1)) + " %", end='\r')
+    print("    100 %")
+   
     print("neg features")
+    k = 0
     for line in negLines:
         features.append(make_singleSample(line, lexicon, [0,1]))
         k += 1
-        if k % int(len(negLines) / 100) == 0:
-            print(str(int(k / 100)) + "%o")
-    
+        if k % int(len(negLines) / percent) == 0:
+            print("    " + str((int(k*100 / len(negLines))+1)) + " %", end='\r')
+    print("    100 %")
+
     print("shuffle")
     r.shuffle(features)
+
     print("to array")
     features = np.array(features)
 
@@ -101,12 +106,12 @@ def make_lexicon_and_Samples(testSize=0.1):
     test_y = list(features[:,1][-testingSize:])
 
     print("returns")
+    
     return train_x,train_y,test_x,test_y
 
 '''
 NEURAL NETWORK - TODO: IMPROVE ACCURACY
 '''
-
 
 train_x,train_y,test_x,test_y = make_lexicon_and_Samples()
 size = len(train_x[0])
