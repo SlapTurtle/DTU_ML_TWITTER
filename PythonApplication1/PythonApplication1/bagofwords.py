@@ -96,8 +96,8 @@ def make_lexicon_and_Samples(testSize=0.1):
     features = np.array(features)
 
     print("tests")
-    #testingSize = int(testSize*len(features))
-    testingSize = 20000
+    testingSize = int(testSize*len(features))
+    #testingSize = 20000
 
     train_x = list(features[:,0][:-testingSize])
     train_y = list(features[:,1][:-testingSize])
@@ -113,9 +113,6 @@ def make_lexicon_and_Samples(testSize=0.1):
 NEURAL NETWORK - TODO: IMPROVE ACCURACY
 '''
 
-train_x,train_y,test_x,test_y = make_lexicon_and_Samples()
-size = len(train_x[0])
-
 n_nodes_hl1 = 500
 n_nodes_hl2 = 500
 n_nodes_hl3 = 500
@@ -123,10 +120,8 @@ n_nodes_hl3 = 500
 n_classes = 2
 batch_size = 100
 
-x = tf.placeholder('float', [None, size])
-y = tf.placeholder('float')
 
-def neural_network_model(data):
+def neural_network_model(data, size):
     hidden_1_layer = {'weights':tf.Variable(tf.random_normal([size, n_nodes_hl1])),
                       'biases':tf.Variable(tf.random_normal([n_nodes_hl1]))}
 
@@ -153,13 +148,20 @@ def neural_network_model(data):
 
     return output
 
-def train_neural_network(data=x):
-    prediction = neural_network_model(data)
+def train_neural_network():
+    
+    train_x,train_y,test_x,test_y = make_lexicon_and_Samples()
+    size = len(train_x[0])
+
+    x = tf.placeholder('float', [None, size])
+    y = tf.placeholder('float')
+
+    prediction = neural_network_model(x,size)
 
     cost = tf.reduce_mean( tf.nn.softmax_cross_entropy_with_logits(logits=prediction, labels=y) )
     optimizer = tf.train.AdamOptimizer().minimize(cost)
     
-    hm_epochs = 10
+    hm_epochs = 1
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
 
