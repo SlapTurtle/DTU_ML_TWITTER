@@ -29,10 +29,10 @@
     <Compile Include="dataGathering.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="neural.py">
+    <Compile Include="bayes.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="searchPosNeg.py">
+    <Compile Include="neural.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="preprocessing.py" />
