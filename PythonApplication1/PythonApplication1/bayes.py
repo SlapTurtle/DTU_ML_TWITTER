@@ -54,5 +54,3 @@ def single_sample_bayes(model, line):
                 cp[clf] *= model[word][clf]
 
     return cp.index(max(cp)) 
-
-

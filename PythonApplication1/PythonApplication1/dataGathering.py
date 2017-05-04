@@ -1,4 +1,4 @@
-import PythonApplication1 as main
+from PythonApplication1 import getDataPath
 from TwitterAPI import *
 from threading import Thread
 from time import sleep
@@ -14,7 +14,7 @@ api = None
 HB = "------------------------------"
 
 def getSearchTags():
-    path = main.getDataPath(SEARCHTAG_PATH)
+    path = getDataPath(SEARCHTAG_PATH)
     tags = set()
     with open(path, "r") as file:
         for line in file:
@@ -44,7 +44,7 @@ def readData(t):
             for item in iterator:
                 if 'created_at' and 'text' in item:
                     timerCount = 1
-                    path = main.getDataPath(translateDate(item['created_at']))
+                    path = getDataPath(translateDate(item['created_at']))
                     s = '[{}] {}\n'.format(item['created_at'], item['text'].encode('utf-8'))
                     with open(path, "a") as file:
                         file.write(s)

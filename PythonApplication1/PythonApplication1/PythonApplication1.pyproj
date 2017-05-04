@@ -22,17 +22,11 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="analysis.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="bagofwords.py" />
+    <Compile Include="neuralNetwork.py" />
     <Compile Include="dataGathering.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="bayes.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="neural.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="preprocessing.py" />

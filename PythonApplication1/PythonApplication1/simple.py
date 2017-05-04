@@ -1,18 +1,11 @@
-from PythonApplication1 import getDataPath
+from PythonApplication1 import getDataPath,loadFile
 
 def train_simple(pos,neg):
     print("---training simple")
-    POSITIVES = set(loadLexicon(pos))
-    NEGATIVES = set(loadLexicon(neg))
+    POSITIVES = set(loadFile(pos))
+    NEGATIVES = set(loadFile(neg))
 
     return [POSITIVES,NEGATIVES]
-
-def loadLexicon(s):
-    list = []
-    with open(getDataPath(s), "r") as file:
-        for line in file:
-            list.append(line.replace('\n', ''))
-    return list
 
 def test_simple(model, data):
     print("---testing simple")
@@ -35,5 +28,3 @@ def single_sample_simple(model, line):
             negatives = negatives + 1
     
     return 0 if (positives >= negatives) else 1
-
-

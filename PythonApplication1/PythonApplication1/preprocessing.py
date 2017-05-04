@@ -1,6 +1,8 @@
 import re
+
+from PythonApplication1 import getDataPath,loadFile
+
 from string import digits
-from PythonApplication1 import *
 from time import time
 
 FILE = "2017Mar17"
@@ -57,8 +59,8 @@ def process(file = FILE):
     recent = [""] * 60
     index = 0
 
-    POSITIVES = set(loadLexicon("positives"))
-    NEGATIVES = set(loadLexicon("negatives"))
+    POSITIVES = set(loadFile("positives"))
+    NEGATIVES = set(loadFile("negatives"))
 
     for line in data:
         text = get_text(line)
@@ -147,10 +149,3 @@ def filedump(s, file = FILE):
     dp = getDataPath(file)[:-4] + "_p.txt"
     with open(dp, "a") as file:
         file.write(s)
-
-def loadLexicon(s):
-    list = []
-    with open(getDataPath(s), "r") as file:
-        for line in file:
-            list.append(line[:-1])
-    return list

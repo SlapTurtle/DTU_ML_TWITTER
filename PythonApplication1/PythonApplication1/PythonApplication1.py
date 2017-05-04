@@ -1,11 +1,11 @@
-#import tensorflow as tf
 import os
-from analysis import *
+
+#from dataGathering import *
+#from preprocessing import *
+
 from simple import *
-from preprocessing import *
-from dataGathering import *
-#from bagofwords import *
 from bayes import *
+from neuralNetwork import *
 
 import random as r
 
@@ -29,6 +29,13 @@ def directorySkip(s=DATA_PATH):
 def getDataPath(s, endtag='.txt'):
     path = directorySkip() + s + endtag
     return path
+
+def loadFile(s):
+    list = []
+    with open(getDataPath(s), "r") as file:
+        for line in file:
+            list.append(line.replace('\n', ''))
+    return list
 
 def make_lexicon(testingSize, totalSize):
     print("---make lexicon")
@@ -83,13 +90,6 @@ def testRandom(testingSize=0.1, size=1500000):
     percent = compareResults(results, [row[1] for row in test])
     print(percent)
 
-def testBayes(testingSize=0.1, size=1500000):
-    train,test = make_lexicon(testingSize,size)
-    model = train_bayes(train)
-    results = test_bayes(model, [row[0] for row in test])
-    percent = compareResults(results, [row[1] for row in test])
-    print(percent)
-
 def testSimple(testingSize=0.1, size=1500000, pos="positives", neg="negatives"):
     train,test = make_lexicon(testingSize,size)
     model = train_simple(pos,neg)
@@ -97,7 +97,17 @@ def testSimple(testingSize=0.1, size=1500000, pos="positives", neg="negatives"):
     percent = compareResults(results, [row[1] for row in test])
     print(percent)
 
-def testAll(testingSize=0.1, size=1500000, pos="positives", neg="negatives"):
+def testBayes(testingSize=0.1, size=1500000):
+    train,test = make_lexicon(testingSize,size)
+    model = train_bayes(train)
+    results = test_bayes(model, [row[0] for row in test])
+    percent = compareResults(results, [row[1] for row in test])
+    print(percent)
+
+def testNeural(testingSize=0.1, size=1500000):
+    train_neural_network(train, test)
+
+def testAll(testingSize=0.1, size=1000, pos="positives", neg="negatives"):
     eval = []
 
     train,test = make_lexicon(testingSize,size)
@@ -119,6 +129,9 @@ def testAll(testingSize=0.1, size=1500000, pos="positives", neg="negatives"):
     percent = compareResults(results, [row[1] for row in test])
     eval.append(['bayes', percent])
 
+    percent = train_neural_network(train, test, 1)
+    eval.append(['nerual', percent])
+
     print(eval)
 
 if __name__ == '__main__':
@@ -127,6 +140,7 @@ if __name__ == '__main__':
     #startData()
     #analysis()
     #train_neural_network()
+
     #testRandom()
     #testSimple()
     #testBayes()
