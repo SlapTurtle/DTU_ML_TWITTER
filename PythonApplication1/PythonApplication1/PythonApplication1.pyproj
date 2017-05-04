@@ -37,7 +37,7 @@
     </Compile>
     <Compile Include="preprocessing.py" />
     <Compile Include="PythonApplication1.py" />
-    <Compile Include="semantics.py">
+    <Compile Include="simple.py">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

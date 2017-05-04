@@ -1,7 +1,7 @@
 #import tensorflow as tf
 import os
 from analysis import *
-from semantics import *
+from simple import *
 from preprocessing import *
 from dataGathering import *
 #from bagofwords import *

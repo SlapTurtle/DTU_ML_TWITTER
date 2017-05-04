@@ -3,10 +3,13 @@ from string import digits
 from PythonApplication1 import *
 from time import time
 
-FILE = "2017Mar16"
+FILE = "2017Mar17"
 DATA_PATH = 'Files\\'
 
-# HUSK: at undgå split ved '-'
+POSITIVES = set()
+NEGATIVES = set()
+
+# HUSK: at måske undgå split ved '-'
 
 def parseSet(file = "SentimentAnalysisDataset"):
     clearfile("ds_pos")
@@ -14,7 +17,6 @@ def parseSet(file = "SentimentAnalysisDataset"):
     time_start = time()
     print("Parsing set . . .")
     with open(getDataPath(file), "r", encoding='utf8') as f:
-        #k, max = 0, 100000
         k = 0
         for line in f:
             line = str(line.encode('utf-8')).replace('\n','')
@@ -32,21 +34,31 @@ def parseSet(file = "SentimentAnalysisDataset"):
                 fi.write(prep(line[i:])[:-2] + "\n")
             k += 1
 
-
             if k % 1000 == 0:
                 print("Finished " + str(k))
-            #if k == max:
-             #   break
     time_end = time()
     print("Processed " + FILE + " in " + (str)(time_end - time_start)[:4] + "s")
 
+def processMar():
+    for date in range(30,32):
+        process("2017Mar" + str(date))
+
+def processApr():
+    for date in range(10,15):
+        process("2017Apr" + str(date))
+
 def process(file = FILE):
+    global POSITIVES, NEGATIVES
+
     time_start = time()
     data = open(getDataPath(file))
-    clearfile()
+    clearfile(file)
 
     recent = [""] * 60
     index = 0
+
+    POSITIVES = set(loadLexicon("positives"))
+    NEGATIVES = set(loadLexicon("negatives"))
 
     for line in data:
         text = get_text(line)
@@ -57,7 +69,7 @@ def process(file = FILE):
                 spam = True
                 break
         if not spam:
-            filedump(result + "\n")
+            filedump(result + "\n", file)
             recent[index] = result
             if (1 + index < len(recent)):
                 index = index + 1
@@ -65,7 +77,7 @@ def process(file = FILE):
                 index = 0
 
     time_end = time()
-    print("Processed " + FILE + " in " + (str)(time_end - time_start)[:4] + "s")
+    print("Processed " + file + " in " + (str)(time_end - time_start)[:4] + "s")
 
 # get text from data string
 def get_text(string):
@@ -77,8 +89,9 @@ def get_text(string):
 # prep
 def prep(string):
     tokenized = tokenize(re.sub('[\']', '', string))
+    prol = alter_prolonged(tokenized)
     result = ""
-    for t in tokenized:
+    for t in prol:
         result = result + t + " "
     return result[:-1]
 
@@ -105,9 +118,22 @@ def tokenize(string):
 
 
 # alteration of prolonged words
-# is this needed?
 def alter_prolonged(list = []):
-    return
+    res = list.copy()
+    for v in range(len(list)):
+        i = 0
+        j = -1
+        w = list[v]
+        while(i + 2 < len(w)):
+            if (w[i] == w[i+1] and w[i+1] == w[i+2]):
+                w = w[:i] + w[(i+1):]
+                j = i
+            else:
+                i+= 1
+        if (not (w in POSITIVES or w in NEGATIVES)) and j != -1:
+            w = w[:j] + w[(j+1):]
+        res[v] = w
+    return res
 
 
 # clear file before writing
@@ -117,22 +143,14 @@ def clearfile(file = FILE):
         f.write("")
 
 # write to _p file
-def filedump(s):
-    dp = getDataPath(FILE)[:-4] + "_p.txt"
+def filedump(s, file = FILE):
+    dp = getDataPath(file)[:-4] + "_p.txt"
     with open(dp, "a") as file:
         file.write(s)
 
-def getDataPath(s):
-    path = directorySkip() + s +'.txt'
-    return path
-
-def directorySkip(s=DATA_PATH):
-    path = os.path.dirname(os.path.abspath(__file__))
-    if type(path) == str:
-        i,j = len(path),0
-        while (j!=2):
-            i = i-1
-            if path[i] == '\\':
-                j = j + 1
-        return path[0:i+1] + s
-    return None
+def loadLexicon(s):
+    list = []
+    with open(getDataPath(s), "r") as file:
+        for line in file:
+            list.append(line[:-1])
+    return list

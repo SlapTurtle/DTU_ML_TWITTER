@@ -47,7 +47,7 @@ def test_bayes(model, data):
 
 def single_sample_bayes(model, line):
     words = line.split(' ')
-    cp = [1/3, 1/3]
+    cp = [1/2, 1/2]
     for clf in range(len(cp)):
         for word in words:
             if word in model:
