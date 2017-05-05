@@ -105,7 +105,7 @@ def train_neural_network(train, test, epochCount):
     cost = tf.reduce_mean( tf.nn.softmax_cross_entropy_with_logits(logits=prediction, labels=y) )
     optimizer = tf.train.AdamOptimizer().minimize(cost)
     
-    print("---staring training")
+    print("---starting training")
     hm_epochs = epochCount
     percent = 0
     with tf.Session() as sess:
@@ -129,7 +129,7 @@ def train_neural_network(train, test, epochCount):
         correct = tf.equal(tf.argmax(prediction, 1), tf.argmax(y, 1))
 
         
-        print("---staring test")
+        print("---starting test")
         accuracy = tf.reduce_mean(tf.cast(correct, 'float'))
         percent = accuracy.eval({x:test_x, y:test_y})
    

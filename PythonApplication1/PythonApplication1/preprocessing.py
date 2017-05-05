@@ -5,7 +5,6 @@ from string import digits
 from time import time
 
 FILE = "2017Mar17"
-DATA_PATH = 'Files\\'
 
 POSITIVES = set()
 NEGATIVES = set()
@@ -52,8 +51,8 @@ def process(file = FILE):
     global POSITIVES, NEGATIVES
 
     time_start = time()
-    data = open(main.getDataPath(file))
-    clearfile(file)
+    data = open(main.getDataPath(main.RAW_PATH + file))
+    clearfile(main.PRE_PATH + file)
 
     recent = [""] * 60
     index = 0
@@ -145,6 +144,6 @@ def clearfile(file = FILE):
 
 # write to _p file
 def filedump(s, file = FILE):
-    dp = main.getDataPath(file)[:-4] + "_p.txt"
+    dp = main.getDataPath(main.PRE_PATH + file)[:-4] + "_p.txt"
     with open(dp, "a") as file:
         file.write(s)
