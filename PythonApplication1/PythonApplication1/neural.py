@@ -3,7 +3,7 @@ import numpy as np
 from collections import Counter
 
 def make_Lexicon(allLines):
-    upper,lower = 500,10 #Optimize this
+    upper,lower = 1000,50 #Optimize this
 
     retLex = dict()
     tmpLex = []
