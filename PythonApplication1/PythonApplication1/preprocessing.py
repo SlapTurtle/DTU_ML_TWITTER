@@ -1,6 +1,5 @@
+import PythonApplication1 as main
 import re
-
-from PythonApplication1 import getDataPath,loadFile
 
 from string import digits
 from time import time
@@ -18,7 +17,7 @@ def parseSet(file = "SentimentAnalysisDataset"):
     clearfile("ds_neg")
     time_start = time()
     print("Parsing set . . .")
-    with open(getDataPath(file), "r", encoding='utf8') as f:
+    with open(main.getDataPath(file), "r", encoding='utf8') as f:
         k = 0
         for line in f:
             line = str(line.encode('utf-8')).replace('\n','')
@@ -32,7 +31,7 @@ def parseSet(file = "SentimentAnalysisDataset"):
                 i += 1
 
             ds = "ds_pos_p" if pos else "ds_neg_p"
-            with open(getDataPath(ds), "a") as fi:
+            with open(main.getDataPath(ds), "a") as fi:
                 fi.write(prep(line[i:])[:-2] + "\n")
             k += 1
 
@@ -53,14 +52,14 @@ def process(file = FILE):
     global POSITIVES, NEGATIVES
 
     time_start = time()
-    data = open(getDataPath(file))
+    data = open(main.getDataPath(file))
     clearfile(file)
 
     recent = [""] * 60
     index = 0
 
-    POSITIVES = set(loadFile("positives"))
-    NEGATIVES = set(loadFile("negatives"))
+    POSITIVES = set(main.loadFile("positives"))
+    NEGATIVES = set(main.loadFile("negatives"))
 
     for line in data:
         text = get_text(line)
@@ -140,12 +139,12 @@ def alter_prolonged(list = []):
 
 # clear file before writing
 def clearfile(file = FILE):
-    dp = getDataPath(file)[:-4] + "_p.txt"
+    dp = main.getDataPath(file)[:-4] + "_p.txt"
     with open(dp, "w") as f:
         f.write("")
 
 # write to _p file
 def filedump(s, file = FILE):
-    dp = getDataPath(file)[:-4] + "_p.txt"
+    dp = main.getDataPath(file)[:-4] + "_p.txt"
     with open(dp, "a") as file:
         file.write(s)

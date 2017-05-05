@@ -1,11 +1,11 @@
 import os
 
-#from dataGathering import *
-#from preprocessing import *
+from dataGathering import *
+from preprocessing import *
 
 from simple import *
 from bayes import *
-from neuralNetwork import *
+from neural import *
 
 import random as r
 
@@ -45,13 +45,13 @@ def make_lexicon(testingSize, totalSize):
     print("read posfile")
     with open(getDataPath(FILE_pos), "r") as f:
         for line in f:
-            posLines.append([line.replace('\n',''),0])
+            posLines.append([line.replace('\n',''),1])
     print(len(posLines))
     
     print("read negfile")
     with open(getDataPath(FILE_neg), "r") as f:
         for line in f:
-            negLines.append([line.replace('\n',''),1])
+            negLines.append([line.replace('\n',''),0])
     print(len(negLines))
 
     print("shuffle all")
@@ -78,15 +78,19 @@ def compareResults(modeltest, actualtest):
         if r1==r2:
             correct += 1
 
-    return correct/len(actualtest)
+    return correct / len(actualtest)
+
+def randomTest(data):
+    print('--- testing random')
+    results = []
+    for _ in range(len(data)):
+        results.append(r.randint(0,1))
+    return results
 
 def testRandom(testingSize=0.1, size=1500000):
     train,test = make_lexicon(testingSize,size)
-
-    results = []
-    for _ in range(len(test)):
-        results.append(r.randint(0,1))
-
+    model = None
+    results = randomTest([row[0] for row in test])
     percent = compareResults(results, [row[1] for row in test])
     print(percent)
 
@@ -104,18 +108,17 @@ def testBayes(testingSize=0.1, size=1500000):
     percent = compareResults(results, [row[1] for row in test])
     print(percent)
 
-def testNeural(testingSize=0.1, size=1500000):
-    train_neural_network(train, test)
+def testNeural(testingSize=0.1, size=1500000, epochCount=10):
+    train,test = make_lexicon(testingSize,size)
+    train_neural_network(train, test, epochCount)
 
-def testAll(testingSize=0.1, size=1000, pos="positives", neg="negatives"):
+def testAll(testingSize=0.1, size=1500000, pos="positives", neg="negatives", epochCount=10):
     eval = []
 
     train,test = make_lexicon(testingSize,size)
 
-    print('--- testing random')
-    results = []
-    for _ in range(len(test)):
-        results.append(r.randint(0,1))
+    model = None
+    results = randomTest([row[0] for row in test])
     percent = compareResults(results, [row[1] for row in test])
     eval.append(['random', percent])
 
@@ -129,10 +132,11 @@ def testAll(testingSize=0.1, size=1000, pos="positives", neg="negatives"):
     percent = compareResults(results, [row[1] for row in test])
     eval.append(['bayes', percent])
 
-    percent = train_neural_network(train, test, 1)
-    eval.append(['nerual', percent])
+    percent = train_neural_network(train, test, epochCount)
+    eval.append(['neural', percent])
 
-    print(eval)
+    print([testingSize, size, eval])
+    return [testingSize, size, eval]
 
 if __name__ == '__main__':
     #parseSet()

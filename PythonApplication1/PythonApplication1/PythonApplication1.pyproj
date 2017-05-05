@@ -22,7 +22,7 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="neuralNetwork.py" />
+    <Compile Include="neural.py" />
     <Compile Include="dataGathering.py">
       <SubType>Code</SubType>
     </Compile>

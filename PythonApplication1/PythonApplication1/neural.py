@@ -1,59 +1,9 @@
 import tensorflow as tf
-
-from PythonApplication1 import getDataPath
+import numpy as np
 from collections import Counter
 
-FILE_pos = "ds_pos_p"
-FILE_neg = "ds_neg_p"
-
-n_nodes_hl1 = 500
-n_nodes_hl2 = 500
-n_nodes_hl3 = 500
-
-n_classes = 2
-batch_size = 100
-
-def make_lexicon_and_Samples(train, test):
-    allLines = [row[0] for row in train]
-    lexicon = make_Lexicon(allLines)
-
-    train_features = []
-    test_features = []
-
-    print("make train features")
-    k = 0
-    print("    0 %", end='\r')
-    for line,clf in train:
-        type = [1,0] if clf==0 else [0,1]
-        features.append(singleSample(line, lexicon, [1,0]))
-        k += 1
-        if k % int(len(train) / 100) == 0:
-            print("    " + str((int(k*100 / len(train))+1)) + " %", end='\r')
-    print("    100 %")
-
-    print("make test features")
-    k = 0
-    print("    0 %", end='\r')
-    for line,clf in test:
-        type = [1,0] if clf==0 else [0,1]
-        features.append(singleSample(line, lexicon, [1,0]))
-        k += 1
-        if k % int(len(test) / 100) == 0:
-            print("    " + str((int(k*100 / len(test))+1)) + " %", end='\r')
-    print("    100 %")
-
-    print("split x and y")
-
-    train_x = [row[0] for row in train_features]
-    train_y = [row[1] for row in train_features]
-    
-    test_x = [row[0] for row in test_features]
-    test_y = [row[1] for row in test_features]
-    
-    return train_x,train_y,test_x,test_y
-
 def make_Lexicon(allLines):
-    upper,lower = 1000,50 #Optimize this
+    upper,lower = 500,10 #Optimize this
 
     retLex = dict()
     tmpLex = []
@@ -76,7 +26,7 @@ def make_Lexicon(allLines):
 
     return retLex
 
-def singleSample(line, lexicon, classification):
+def singleFeature(line, lexicon, classification):
     feature = np.zeros(len(lexicon))
     words = line.split(' ')
     for word in words:
@@ -84,6 +34,20 @@ def singleSample(line, lexicon, classification):
             index = lexicon[word]
             feature[index] += 1
     return [feature, classification]
+
+def makeFeatures(data, lexicon):
+    features = []
+    for line,clf in data:
+        type = [1,0] if clf==1 else [0,1]
+        features.append(singleFeature(line, lexicon, type))
+    return features
+
+n_nodes_hl1 = 500
+n_nodes_hl2 = 500
+n_nodes_hl3 = 500
+
+n_classes = 2
+batch_size = 1000
 
 def neural_network_model(data, size):
     hidden_1_layer = {'weights':tf.Variable(tf.random_normal([size, n_nodes_hl1])),
@@ -113,9 +77,25 @@ def neural_network_model(data, size):
     return output
 
 def train_neural_network(train, test, epochCount):
+    print("---train neural")
     
-    train_x,train_y,test_x,test_y = make_lexicon_and_Samples(train, test)
-    size = len(train_x[0])
+    print("making lexicon")
+    allLines = [row[0] for row in train]
+    lexicon = make_Lexicon(allLines)
+
+    print("making features")
+    train_features = makeFeatures(train, lexicon)
+    test_features = makeFeatures(test, lexicon)
+
+    train_x = [row[0] for row in train_features]
+    train_y = [row[1] for row in train_features]
+    
+    test_x = [row[0] for row in test_features]
+    test_y = [row[1] for row in test_features]
+
+    print("making graph")
+
+    size = len(lexicon)
 
     x = tf.placeholder('float', [None, size])
     y = tf.placeholder('float')
@@ -125,7 +105,9 @@ def train_neural_network(train, test, epochCount):
     cost = tf.reduce_mean( tf.nn.softmax_cross_entropy_with_logits(logits=prediction, labels=y) )
     optimizer = tf.train.AdamOptimizer().minimize(cost)
     
+    print("---staring training")
     hm_epochs = epochCount
+    percent = 0
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
 
@@ -146,6 +128,10 @@ def train_neural_network(train, test, epochCount):
 
         correct = tf.equal(tf.argmax(prediction, 1), tf.argmax(y, 1))
 
+        
+        print("---staring test")
         accuracy = tf.reduce_mean(tf.cast(correct, 'float'))
-        print('Accuracy:',accuracy.eval({x:test_x, y:test_y}))
-        return accuracy
+        percent = accuracy.eval({x:test_x, y:test_y})
+   
+    print("returning result")
+    return percent 

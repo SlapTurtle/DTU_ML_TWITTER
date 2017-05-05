@@ -7,9 +7,9 @@ def train_bayes(data):
 
     print("making wordlists")
     for line,clf in data:
-        if clf == 0:
+        if clf == 1:
             posWords.extend(line.split(' '))
-        elif clf == 1:
+        elif clf == 0:
             negWords.extend(line.split(' '))
         else:
             print('ERROR')
@@ -28,7 +28,7 @@ def train_bayes(data):
             posSet[word] = 0
         if word not in negSet:
             negSet[word] = 0
-        lexicon[word] = [posSet[word]/count,negSet[word]/count]
+        lexicon[word] = [negSet[word]/count,posSet[word]/count]
 
     print("returning model")
     return lexicon
