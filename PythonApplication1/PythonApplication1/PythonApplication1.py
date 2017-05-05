@@ -10,9 +10,14 @@ from neural import *
 import random as r
 
 DATA_PATH = 'Files\\'
+RAW_PATH = 'Raw\\'
+PRE_PATH = 'Pre\\'
 
+FILE_tag = 'searchtags'
 FILE_pos = "ds_pos_p"
 FILE_neg = "ds_neg_p"
+FILE_bow_pos = 'positives'
+FILE_bow_neg = 'negatives'
 
 
 def directorySkip(s=DATA_PATH):
@@ -81,7 +86,7 @@ def compareResults(modeltest, actualtest):
     return correct / len(actualtest)
 
 def randomTest(data):
-    print('--- testing random')
+    print('---testing random')
     results = []
     for _ in range(len(data)):
         results.append(r.randint(0,1))
@@ -94,7 +99,7 @@ def testRandom(testingSize=0.1, size=1500000):
     percent = compareResults(results, [row[1] for row in test])
     print(percent)
 
-def testSimple(testingSize=0.1, size=1500000, pos="positives", neg="negatives"):
+def testSimple(testingSize=0.1, size=1500000, pos=FILE_bow_pos, neg=FILE_bow_neg):
     train,test = make_lexicon(testingSize,size)
     model = train_simple(pos,neg)
     results = test_simple(model, [row[0] for row in test])
@@ -112,7 +117,7 @@ def testNeural(testingSize=0.1, size=1500000, epochCount=10):
     train,test = make_lexicon(testingSize,size)
     train_neural_network(train, test, epochCount)
 
-def testAll(testingSize=0.1, size=1500000, pos="positives", neg="negatives", epochCount=10):
+def testAll(testingSize=0.1, size=100000, pos=FILE_bow_pos, neg=FILE_bow_neg, epochCount=10):
     eval = []
 
     train,test = make_lexicon(testingSize,size)
@@ -120,11 +125,13 @@ def testAll(testingSize=0.1, size=1500000, pos="positives", neg="negatives", epo
     model = None
     results = randomTest([row[0] for row in test])
     percent = compareResults(results, [row[1] for row in test])
+    print(percent)
     eval.append(['random', percent])
 
     model = train_simple(pos,neg)
     results = test_simple(model, [row[0] for row in test])
     percent = compareResults(results, [row[1] for row in test])
+    print(percent)
     eval.append(['simple', percent])
 
     model = train_bayes(train)
@@ -133,6 +140,7 @@ def testAll(testingSize=0.1, size=1500000, pos="positives", neg="negatives", epo
     eval.append(['bayes', percent])
 
     percent = train_neural_network(train, test, epochCount)
+    print(percent)
     eval.append(['neural', percent])
 
     print([testingSize, size, eval])

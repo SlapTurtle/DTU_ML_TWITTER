@@ -8,13 +8,13 @@ consumer_secret = 'TM8g6A7GveM5wkZahV8ZgILYGHJcChVNVJblAEn6ZdL9gLCVnA'
 access_token_key = '3688759636-pYAsFBCIAFphzdwvNZjrbcydWFLZ2NFogRybaGc'
 access_token_secret = 'hmM8DZAnLMGn7lGrGbU697eIB0hwbK8XheUXSIQM5CruM'
 
-SEARCHTAG_PATH = 'searchtags'
+
 
 api = None
 HB = "------------------------------"
 
 def getSearchTags():
-    path = main.getDataPath(SEARCHTAG_PATH)
+    path = main.getDataPath(main.FILE_tag)
     tags = set()
     with open(path, "r") as file:
         for line in file:
@@ -44,7 +44,7 @@ def readData(t):
             for item in iterator:
                 if 'created_at' and 'text' in item:
                     timerCount = 1
-                    path = main.getDataPath(translateDate(item['created_at']))
+                    path = main.getDataPath(main.RAW_PATH + translateDate(item['created_at']))
                     s = '[{}] {}\n'.format(item['created_at'], item['text'].encode('utf-8'))
                     with open(path, "a") as file:
                         file.write(s)
