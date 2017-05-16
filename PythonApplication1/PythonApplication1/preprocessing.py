@@ -1,13 +1,15 @@
 import PythonApplication1 as main
 import re
+import nltk
 
 from string import digits
 from time import time
 
-FILE = "2017Mar17"
+FILE = "hpos"
 
 POSITIVES = set()
 NEGATIVES = set()
+NOISE = set()
 
 # HUSK: at måske undgå split ved '-'
 
@@ -39,16 +41,21 @@ def parseSet(file = "SentimentAnalysisDataset"):
     time_end = time()
     print("Processed " + FILE + " in " + (str)(time_end - time_start)[:4] + "s")
 
+
 def processMar():
     for date in range(30,32):
         process("2017Mar" + str(date))
+
 
 def processApr():
     for date in range(10,15):
         process("2017Apr" + str(date))
 
+
 def process(file = FILE):
-    global POSITIVES, NEGATIVES
+    global POSITIVES, NEGATIVES, NOISE
+
+    NOISE = set(["rt", "iwd", "n", "i", "u", "it", "its", "us", "we", "you", "me", "they", "your", "my", "on", "of", "in", "by", "at", "to", "from", "for", "a", "an", "im", "r", "this", "those", "that", "them", "the"])
 
     time_start = time()
     data = open(main.getDataPath(main.RAW_PATH + file))
@@ -61,7 +68,8 @@ def process(file = FILE):
     NEGATIVES = set(main.loadFile("negatives"))
 
     for line in data:
-        text = get_text(line)
+        #text = get_text(line)
+        text = line
         result = prep(text)
         spam = False
         for r in recent:
@@ -79,12 +87,12 @@ def process(file = FILE):
     time_end = time()
     print("Processed " + file + " in " + (str)(time_end - time_start)[:4] + "s")
 
+
 # get text from data string
 def get_text(string):
     string = string.replace('\"', "'", 1)
     date, text = string.split("'", 1)
     return text[:-1]
-
 
 # prep
 def prep(string):
@@ -94,6 +102,7 @@ def prep(string):
     for t in prol:
         result = result + t + " "
     return result[:-1]
+
 
 # cool stuff
 def tokenize(string):
@@ -110,15 +119,20 @@ def tokenize(string):
                     tokenized.pop(i)
             except:
                 pass
-        elif (len(word) < 1) or (len(word) <= 3 and word[0] == 'x') or (word == "rt"):
+        elif (i > 0 and (word == "t" or word == "nt" or word == "re" or word == "s")):
+            tokenized[i-1] = tokenized[i-1] + word
+            tokenized.pop(i)
+        elif (len(word) < 1) or (len(word) <= 3 and word[0] == 'x') or (word in NOISE):
             tokenized.pop(i)
         else:
             i = i + 1
     return tokenized
 
 
-# alteration of prolonged words
+# alteration of prolonged words + stemming
 def alter_prolonged(list = []):
+    stemmer = nltk.stem.porter.PorterStemmer()
+    #lemmatizer = nltk.WordNetLemmatizer()
     res = list.copy()
     for v in range(len(list)):
         i = 0
@@ -132,8 +146,12 @@ def alter_prolonged(list = []):
                 i+= 1
         if (not (w in POSITIVES or w in NEGATIVES)) and j != -1:
             w = w[:j] + w[(j+1):]
-        res[v] = w
+        res[v] = stemmer.stem(w)
+        #res[v] = lemmatizer.lemmatize(w)
     return res
+
+#stemming
+#def stem(word):
 
 
 # clear file before writing
@@ -141,6 +159,7 @@ def clearfile(file = FILE):
     dp = main.getDataPath(file)[:-4] + "_p.txt"
     with open(dp, "w") as f:
         f.write("")
+
 
 # write to _p file
 def filedump(s, file = FILE):

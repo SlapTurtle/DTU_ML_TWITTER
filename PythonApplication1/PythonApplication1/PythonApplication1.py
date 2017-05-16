@@ -5,13 +5,15 @@ from preprocessing import *
 
 from simple import *
 from bayes import *
-from neural import *
+#from neural import *
+from filter import *
 
 import random as r
 
 DATA_PATH = 'Files\\'
 RAW_PATH = 'Raw\\'
 PRE_PATH = 'Pre\\'
+FILTER_PATH = 'Filter\\'
 
 FILE_tag = 'searchtags'
 FILE_pos = "ds_pos_p"
@@ -43,41 +45,41 @@ def loadFile(s):
     return list
 
 def make_lexicon(testingSize, totalSize):
-    print("---make lexicon")
+    #print("---make lexicon")
     posLines = []
     negLines = []
 
-    print("read posfile")
+    #print("read posfile")
     with open(getDataPath(FILE_pos), "r") as f:
         for line in f:
             posLines.append([line.replace('\n',''),1])
-    print(len(posLines))
+    #print(len(posLines))
     
-    print("read negfile")
+    #print("read negfile")
     with open(getDataPath(FILE_neg), "r") as f:
         for line in f:
             negLines.append([line.replace('\n',''),0])
-    print(len(negLines))
+    #print(len(negLines))
 
-    print("shuffle all")
+    #print("shuffle all")
     allLines = posLines+negLines
     r.shuffle(allLines)
 
-    print("cuts testsize")
+    #print("cuts testsize")
     allLines = allLines[:totalSize]
-    print(len(allLines))
+    #print(len(allLines))
 
     testSize = int(testingSize*len(allLines))
     train = allLines[:-testSize]
     test = allLines[-testSize:]
-    print("TestSize: "+str(len(test)))
-    print("TrainSize: "+str(len(train)))
+    #print("TestSize: "+str(len(test)))
+    #print("TrainSize: "+str(len(train)))
 
-    print("return: train test")
+    #print("return: train test")
     return train,test
 
 def compareResults(modeltest, actualtest):
-    print("---comparing results")
+    #print("---comparing results")
     correct = 0
     for r1,r2 in zip(modeltest,actualtest):
         if r1==r2:
@@ -112,6 +114,7 @@ def testBayes(testingSize=0.1, size=1500000):
     results = test_bayes(model, [row[0] for row in test])
     percent = compareResults(results, [row[1] for row in test])
     print(percent)
+    return percent
 
 def testNeural(testingSize=0.1, size=1500000, epochCount=10):
     train,test = make_lexicon(testingSize,size)
@@ -153,7 +156,14 @@ if __name__ == '__main__':
     #analysis()
     #train_neural_network()
 
+    #filterfolder()
+
     #testRandom()
     #testSimple()
-    #testBayes()
-    testAll()
+    #    testAll()
+    avg = 0
+    iterations = 50
+    for i in range(0, iterations):
+        avg = avg + testBayes()
+    avg = avg / iterations
+    print("Avg: " + str(avg))

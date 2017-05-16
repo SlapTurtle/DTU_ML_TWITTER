@@ -1,11 +1,11 @@
 from collections import Counter
 
 def train_bayes(data):
-    print("---train bayes")
+    #print("---train bayes")
     posWords = []
     negWords = []
 
-    print("making wordlists")
+    #print("making wordlists")
     for line,clf in data:
         if clf == 1:
             posWords.extend(line.split(' '))
@@ -14,14 +14,14 @@ def train_bayes(data):
         else:
             print('ERROR')
 
-    print("counting words")
+    #print("counting words")
     posSet = Counter(posWords)
     negSet = Counter(negWords)
 
     allSet = set(posWords+negWords)
     count = len(allSet)
 
-    print("making dict")
+    #print("making dict")
     lexicon = dict()
     for word in allSet:
         if word not in posSet:
@@ -30,19 +30,19 @@ def train_bayes(data):
             negSet[word] = 0
         lexicon[word] = [negSet[word]/count,posSet[word]/count]
 
-    print("returning model")
+    #print("returning model")
     return lexicon
 
 def test_bayes(model, data):
-    print("---testing bayes")
+    #print("---testing bayes")
 
-    print("testing samples")
+    #print("testing samples")
     results = []
     for line in data:
         res = single_sample_bayes(model, line)
         results.append(res)
 
-    print("returning results")
+    #print("returning results")
     return results
 
 def single_sample_bayes(model, line):
