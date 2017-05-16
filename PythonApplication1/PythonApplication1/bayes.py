@@ -1,3 +1,4 @@
+import PythonApplication1 as main
 from collections import Counter
 
 def train_bayes(data):
@@ -53,4 +54,25 @@ def single_sample_bayes(model, line):
             if word in model:
                 cp[clf] *= model[word][clf]
 
-    return cp.index(max(cp)) 
+    return cp.index(max(cp))
+
+def use_bayes(model, data, filename):
+    res = test_bayes(model, data)
+    dp = main.getDataPath(main.RES_PATH + filename, endtag='_b.txt')
+
+    pos = 0
+    neg = 0
+
+    with open(dp, "w") as f:
+        f.write("")
+
+    with open(dp, "a") as f:
+        for clf in res:
+            if clf == 1:
+                pos += 1
+            else:
+                neg += 1
+
+            f.write(str(clf)+'\n')
+
+    return pos,neg,pos+neg
