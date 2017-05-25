@@ -93,5 +93,5 @@ def bayesOnFolder(endpath):
         for name in filenames:
             if(name != '_results.txt'):
                 data = main.loadFile(endpath+name, endtag='')
-                pos,neg,total = use_bayes(model, data, name[:-4])
-                f.write(name[:-4] + ',' + str(pos) + ',' + str(neg) + ',' + str(total) + '\n')
+                pos,neg,neu,total = use_bayes(model, data, name[:-4])
+                f.write(name[:-4] + ',' + str(pos) + ',' + str(neg) + ',' + str(neu) + ',' + str(total) + '\n')
