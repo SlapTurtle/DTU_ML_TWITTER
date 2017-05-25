@@ -1,29 +1,31 @@
 import PythonApplication1 as main
 
-def train_simple(pos,neg):
-    print("---training simple")
-    POSITIVES = set(main.loadFile(pos))
-    NEGATIVES = set(main.loadFile(neg))
+def train_simple(neu,pos,neg):
+	print("---training simple")
 
-    return [POSITIVES,NEGATIVES]
+	NEUTRALS = set(main.loadFile(neu))
+	POSITIVES = set(main.loadFile(pos))
+	NEGATIVES = set(main.loadFile(neg))
+
+	return [NEUTRALS,POSITIVES,NEGATIVES]
 
 def test_simple(model, data):
-    print("---testing simple")
-    results = []
-    for line in data:
-        res = single_sample_simple(model, line)
-        results.append(res)
+	print("---testing simple")
+	results = []
+	for line in data:
+		res = single_sample_simple(model, line)
+		results.append(res)
 
-    return results
+	return results
 
 def single_sample_simple(model, line):
-    score = 0
+	score = 0
 
-    words = line.split(' ')
-    for word in words:
-        if word in model[0]:
-            score += 1
-        elif word in model[1]:
-            score -= 1
+	words = line.split(' ')
+	for word in words:
+		if word in model[0]:
+			score += 1
+		elif word in model[1]:
+			score -= 1
 
-    return 1 if score >= 0 else 0
+	return 0 if score < 0 else 1 if score > 0 else 2 
