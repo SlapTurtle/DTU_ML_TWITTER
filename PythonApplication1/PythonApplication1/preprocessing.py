@@ -10,6 +10,7 @@ FILE = "hpos"
 POSITIVES = set()
 NEGATIVES = set()
 NOISE = set()
+TAGS = set()
 
 # HUSK: at måske undgå split ved '-'
 
@@ -43,19 +44,29 @@ def parseSet(file = "SentimentAnalysisDataset"):
 
 
 def processMar():
-    for date in range(30,32):
-        process("2017Mar" + str(date))
+    for date in range(17,32):
+        try:
+            process("2017Mar" + str(date))
+        except:
+            print("Date " + str(date) + " not found")
+            pass
 
 
 def processApr():
-    for date in range(10,15):
-        process("2017Apr" + str(date))
+    for date in range(30,31):
+        try:
+            zero = "0" if date < 10 else ""
+            process("2017Apr" + zero + str(date))
+        except:
+            print("Date " + str(date) + " not found")
+            pass
 
 
 def process(file = FILE):
-    global POSITIVES, NEGATIVES, NOISE
+    global POSITIVES, NEGATIVES, NOISE, TAGS
 
     NOISE = set(["rt", "iwd", "n", "i", "u", "it", "its", "us", "we", "you", "me", "they", "your", "my", "on", "of", "in", "by", "at", "to", "from", "for", "a", "an", "im", "r", "this", "those", "that", "them", "the"])
+    TAGS = getTags()
 
     time_start = time()
     data = open(main.getDataPath(main.RAW_PATH + file))
@@ -67,10 +78,17 @@ def process(file = FILE):
     POSITIVES = set(main.loadFile("positives"))
     NEGATIVES = set(main.loadFile("negatives"))
 
+    linecount = 0
+    removed = 0
+
     for line in data:
-        #text = get_text(line)
-        text = line
+        linecount += 1
+        text = get_text(line)
+        #text = line
         result = prep(text)
+        if (result == []):
+            removed += 1
+            continue
         spam = False
         for r in recent:
             if result == r:
@@ -86,6 +104,7 @@ def process(file = FILE):
 
     time_end = time()
     print("Processed " + file + " in " + (str)(time_end - time_start)[:4] + "s")
+    print(str(removed) + " of " + str(linecount) + " lines filtered out\n")
 
 
 # get text from data string
@@ -97,6 +116,8 @@ def get_text(string):
 # prep
 def prep(string):
     tokenized = tokenize(re.sub('[\']', '', string))
+    if (tokenized == []):
+        return []
     prol = alter_prolonged(tokenized)
     result = ""
     for t in prol:
@@ -108,11 +129,15 @@ def prep(string):
 def tokenize(string):
     list = re.split("\W+|_", string)
     tokenized = [x.lower() for x in list]
+    tokenized = filter(tokenized)
+    if (tokenized == []):
+        return []
     i = 0
     while(i != len(tokenized)):
         no_digits = str.maketrans('', '', digits)
         tokenized[i] = tokenized[i].translate(no_digits)
         word = tokenized[i]
+
         if (word == "https" or word == "nhttps"):
             try:
                 for j in range(0,4):
@@ -146,20 +171,35 @@ def alter_prolonged(list = []):
                 i+= 1
         if (not (w in POSITIVES or w in NEGATIVES)) and j != -1:
             w = w[:j] + w[(j+1):]
-        res[v] = stemmer.stem(w)
+        try:
+            res[v] = stemmer.stem(w)
+        except:
+            print("Could not stem word '" + w + "'")
+            res[v] = w
+            pass
         #res[v] = lemmatizer.lemmatize(w)
     return res
 
-#stemming
-#def stem(word):
+#filter
+def filter(list):
+    for word in list:
+        if (word in TAGS):
+            return list
+    return []
 
+def getTags():
+    path = main.getDataPath(main.FILE_tag + "_f")
+    tags = set()
+    with open(path, "r") as file:
+        for line in file:
+            tags.add(line[:-1])
+    return tags
 
 # clear file before writing
 def clearfile(file = FILE):
     dp = main.getDataPath(file)[:-4] + "_p.txt"
     with open(dp, "w") as f:
         f.write("")
-
 
 # write to _p file
 def filedump(s, file = FILE):

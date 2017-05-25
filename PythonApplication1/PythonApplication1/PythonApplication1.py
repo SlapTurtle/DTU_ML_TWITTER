@@ -80,6 +80,7 @@ def make_lexicon(testingSize, totalSize):
 if __name__ == '__main__':
     #parseSet()
     #process()
+    #processApr()
     #startData()
     #analysis()
     #train_neural_network()
@@ -89,5 +90,5 @@ if __name__ == '__main__':
     #testBayes()
     #testAll()
 
-    #bayesOnFolder(main.PRE_PATH)
-    bayesOnFolder(main.FITER_PATH)
+    bayesOnFolder(main.PRE_PATH)
+    #bayesOnFolder(main.FITER_PATH)

@@ -63,8 +63,11 @@ def use_bayes(model, data, filename):
     pos = 0
     neg = 0
 
-    with open(dp, "w") as f:
-        f.write("")
+    try:
+        with open(dp, "W") as f:
+            f.write("")
+    except:
+        pass
 
     with open(dp, "a") as f:
         for clf in res:
