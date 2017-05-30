@@ -18,6 +18,9 @@ from dataGathering import *
 from preprocessing import *
 from analysis import *
 
+def time():
+    return time()
+
 def directorySkip(s=DATA_PATH):
 	path = os.path.dirname(os.path.abspath(__file__))
 	if type(path) == str:

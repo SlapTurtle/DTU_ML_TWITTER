@@ -3,7 +3,7 @@ import random as r
 
 from simple import *
 from bayes import *
-#from neural import *
+from neural import *
 
 from os import walk
 
