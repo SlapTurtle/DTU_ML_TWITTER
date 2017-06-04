@@ -1,6 +1,7 @@
 import tensorflow as tf
 import numpy as np
 from collections import Counter
+import PythonApplication1 as main
 
 def make_Lexicon(allLines):
 	upper,lower = 1000,50 #Optimize this
@@ -129,8 +130,10 @@ def train_neural_network(train, test, epochCount):
 
 		
 		print("---starting test")
+		time_start = main.getTime()
 		accuracy = tf.reduce_mean(tf.cast(correct, 'float'))
 		percent = accuracy.eval({x:test_x, y:test_y})
-   
+		time_end = main.getTime()
+		print("Neural time elapsed: " + str(time_end - time_start))
 	print("returning result")
 	return percent

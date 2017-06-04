@@ -62,7 +62,7 @@ def testAll(testingSize=0.1, size=1500000, neu=main.FILE_bow_neu, pos=main.FILE_
     return [testingSize, size, eval]
 
 def compareResults(modeltest, actualtest):
-    print("---comparing results")
+    #print("---comparing results")
     correct = 0
     for r1,r2 in zip(modeltest,actualtest):
         if r1==r2:

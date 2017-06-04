@@ -42,13 +42,14 @@ def train_bayes(data):
 
 def test_bayes(model, data):
 	#print("---testing bayes")
-
 	#print("testing samples")
 	results = []
+	time_start = main.getTime()
 	for line in data:
 		res = single_sample_bayes(model, line)
 		results.append(res)
-
+	time_end = main.getTime()
+	#print("Bayes time elapsed: " + str(time_end - time_start))
 	#print("returning results")
 	return results
 

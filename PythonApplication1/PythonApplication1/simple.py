@@ -12,10 +12,12 @@ def train_simple(neu,pos,neg):
 def test_simple(model, data):
 	print("---testing simple")
 	results = []
+	time_start = main.getTime()
 	for line in data:
 		res = single_sample_simple(model, line)
 		results.append(res)
-
+	time_end = main.getTime()
+	print("Simple time elapsed: " + str(time_end - time_start))
 	return results
 
 def single_sample_simple(model, line):

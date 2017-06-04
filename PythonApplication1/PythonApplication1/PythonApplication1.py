@@ -18,7 +18,7 @@ from dataGathering import *
 from preprocessing import *
 from analysis import *
 
-def time():
+def getTime():
     return time()
 
 def directorySkip(s=DATA_PATH):
@@ -44,36 +44,30 @@ def loadFile(s, endtag='.txt'):
 	return list
 
 def make_lexicon(testingSize, totalSize):
-	print("---make lexicon")
 	neuLines = []
 	posLines = []
 	negLines = []
 
-	print("read neufile")
 	with open(getDataPath(FILE_neu), "r") as f:
 		for line in f:
 			neuLines.append([line.replace('\n',''),2])
-	print(len(neuLines))
+	#print("Neutrals: " + str(len(neuLines)))
 
-	print("read posfile")
 	with open(getDataPath(FILE_pos), "r") as f:
 		for line in f:
 			posLines.append([line.replace('\n',''),1])
-	print(len(posLines))
+	#print("Positives: " + str(len(posLines)))
 	
-	print("read negfile")
 	with open(getDataPath(FILE_neg), "r") as f:
 		for line in f:
 			negLines.append([line.replace('\n',''),0])
-	print(len(negLines))
+	#print("Negatives: " + str(len(negLines)))
 
-	print("shuffle all")
+	#print("shuffle all")
 	allLines = neuLines+posLines+negLines
 	r.shuffle(allLines)
 
-	print("cuts testsize")
 	allLines = allLines[:totalSize]
-	print(len(allLines))
 
 	if testingSize == 0:
 		train = allLines
@@ -83,10 +77,9 @@ def make_lexicon(testingSize, totalSize):
 		train = allLines[:-testSize]
 		test = allLines[-testSize:]    
 	
-	print("TestSize: "+str(len(test)))
-	print("TrainSize: "+str(len(train)))
+	#print("TestSize: "+str(len(test)))
+	#print("TrainSize: "+str(len(train)))
 
-	print("return: train test")
 	return train,test
 
 if __name__ == '__main__':
@@ -98,8 +91,9 @@ if __name__ == '__main__':
 
 	#testRandom()
 	#testSimple()
-	#testBayes()
-	testAll(size = 10000)
+	for i in range(1, 20):
+		testBayes()
+		#testAll(size = 10000)
 
 	#bayesOnFolder(main.PRE_PATH)
 	#bayesOnFolder(main.FILTER_PATH)

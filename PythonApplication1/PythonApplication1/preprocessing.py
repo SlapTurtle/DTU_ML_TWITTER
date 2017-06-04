@@ -5,14 +5,12 @@ import nltk
 from string import digits
 from time import time
 
-FILE = "hirr"
+FILE = "hpos"
 
 POSITIVES = set()
 NEGATIVES = set()
 NOISE = set()
 TAGS = set()
-
-# HUSK: at måske undgå split ved '-'
 
 def parseSet(file = "SentimentAnalysisDataset"):
     clearfile("ds_pos")
@@ -52,11 +50,11 @@ def processMar():
             pass
 
 
-def processApr():
-    for date in range(30,31):
+def processMay():
+    for date in range(10,22):
         try:
             zero = "0" if date < 10 else ""
-            process("2017Apr" + zero + str(date))
+            process("2017May" + zero + str(date))
         except:
             print("Date " + str(date) + " not found")
             pass
