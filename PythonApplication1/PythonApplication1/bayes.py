@@ -30,12 +30,12 @@ def train_bayes(data):
 	lexicon = dict()
 	for word in allSet:
 		if word not in neuSet:
-			neuSet[word] = 0
+			neuSet[word] = 0.0
 		if word not in posSet:
-			posSet[word] = 0
+			posSet[word] = 0.0
 		if word not in negSet:
-			negSet[word] = 0
-		lexicon[word] = [negSet[word]/count,posSet[word]/count,neuSet[word]/count]
+			negSet[word] = 0.0
+		lexicon[word] = [float(negSet[word]) / float(count), float(posSet[word]) / float(count), float(neuSet[word]) / float(count)]
 
 	#print("returning model")
 	return lexicon
@@ -61,7 +61,12 @@ def single_sample_bayes(model, line):
 			if word in model:
 				cp[clf] *= model[word][clf]
 
-	return cp.index(max(cp))
+	if cp[0] == cp[1]:
+		return 2
+	if cp[0] < cp[1]:
+		return 1 if cp[1] >= cp[2] else 2
+	if cp[1] < cp[0]:
+		return 0 if cp[0] >= cp[2] else 2
 
 def use_bayes(model, data, filename):
 	res = test_bayes(model, data)
