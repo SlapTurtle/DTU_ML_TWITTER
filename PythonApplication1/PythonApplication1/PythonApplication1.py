@@ -5,9 +5,9 @@ RES_PATH = 'Res\\'
 FILTER_PATH = 'Filter\\'
 
 FILE_tag = 'searchtags'
-FILE_neu = "ds_neu_p"
-FILE_pos = "ds_pos_p"
-FILE_neg = "ds_neg_p"
+FILE_neu = "hneu_p"
+FILE_pos = "hpos_p"
+FILE_neg = "hneg_p"
 FILE_bow_neu = 'neutrals'
 FILE_bow_pos = 'positives'
 FILE_bow_neg = 'negatives'
@@ -91,9 +91,9 @@ if __name__ == '__main__':
 
 	#testRandom()
 	#testSimple()
-	for i in range(1, 20):
-		testBayes()
+	#for i in range(1, 20):
+	#	testBayes()
 		#testAll(size = 10000)
 
-	#bayesOnFolder(main.PRE_PATH)
+	bayesOnFolder(main.PRE_PATH)
 	#bayesOnFolder(main.FILTER_PATH)

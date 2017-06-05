@@ -5,7 +5,7 @@ import nltk
 from string import digits
 from time import time
 
-FILE = "hpos"
+FILE = "hneg"
 
 POSITIVES = set()
 NEGATIVES = set()
