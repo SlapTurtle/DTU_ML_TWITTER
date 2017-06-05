@@ -7,7 +7,7 @@ def train_simple(neu,pos,neg):
 	POSITIVES = set(main.loadFile(pos))
 	NEGATIVES = set(main.loadFile(neg))
 
-	return [NEUTRALS,POSITIVES,NEGATIVES]
+	return [NEGATIVES,POSITIVES,NEUTRALS]
 
 def test_simple(model, data):
 	print("---testing simple")

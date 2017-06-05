@@ -39,7 +39,7 @@ def singleFeature(line, lexicon, classification):
 def makeFeatures(data, lexicon):
 	features = []
 	for line,clf in data:
-		type = [1,0,0] if clf==2 else [0,1,0] if clf==1  else [0,0,1]
+		type = [1,0,0] if clf==0 else [0,1,0] if clf==1  else [0,0,1]
 		features.append(singleFeature(line, lexicon, type))
 	return features
 
