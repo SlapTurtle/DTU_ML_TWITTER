@@ -63,7 +63,6 @@ def make_lexicon(testingSize, totalSize):
 			negLines.append([line.replace('\n',''),0])
 	#print("Negatives: " + str(len(negLines)))
 
-	#print("shuffle all")
 	allLines = neuLines+posLines+negLines
 	r.shuffle(allLines)
 
@@ -91,9 +90,14 @@ if __name__ == '__main__':
 
 	#testRandom()
 	#testSimple()
-	#for i in range(1, 20):
-	#	testBayes()
-		#testAll(size = 10000)
-
-	bayesOnFolder(main.PRE_PATH)
+	for x in range(1, 16):
+		x *= 100
+		j = 0
+		count = 100
+		for i in range(0, count):
+			j += testBayes(size = x)
+		j = j/count
+		print(j)
+		print("x = " + str(x) + ", accuracy = " + str(j))
+	#bayesOnFolder(main.PRE_PATH)
 	#bayesOnFolder(main.FILTER_PATH)

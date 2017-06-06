@@ -2,12 +2,11 @@ import PythonApplication1 as main
 from collections import Counter
 
 def train_bayes(data):
-	#print("---train bayes")
+	#print("train bayes")
 	negWords = []
 	posWords = []
 	neuWords = []
 
-	#print("making wordlists")
 	for line,clf in data:
 		if clf == 2:
 			neuWords.extend(line.split(' '))
@@ -18,7 +17,6 @@ def train_bayes(data):
 		else:
 			print('ERROR')
 
-	#print("counting words")
 	neuSet = Counter(neuWords)
 	posSet = Counter(posWords)
 	negSet = Counter(negWords)
@@ -26,7 +24,6 @@ def train_bayes(data):
 	allSet = set(negWords+posWords+neuWords)
 	count = len(allSet)
 
-	#print("making dict")
 	lexicon = dict()
 	for word in allSet:
 		if word not in neuSet:
@@ -37,12 +34,14 @@ def train_bayes(data):
 			negSet[word] = 0.0
 		lexicon[word] = [float(negSet[word]) / float(count), float(posSet[word]) / float(count), float(neuSet[word]) / float(count)]
 
-	#print("returning model")
+	#microsoft = lexicon["microsoft"]
+	#print("Microsoft: " + str(microsoft))
+	#msft = lexicon["msft"]
+	#print("MSFT: " + str(msft))
 	return lexicon
 
 def test_bayes(model, data):
-	#print("---testing bayes")
-	#print("testing samples")
+	#print("testing bayes")
 	results = []
 	time_start = main.getTime()
 	for line in data:
@@ -50,7 +49,6 @@ def test_bayes(model, data):
 		results.append(res)
 	time_end = main.getTime()
 	#print("Bayes time elapsed: " + str(time_end - time_start))
-	#print("returning results")
 	return results
 
 def single_sample_bayes(model, line):
@@ -85,7 +83,7 @@ def use_bayes(model, data, filename):
 				neu += 1
 			if clf == 1:
 				pos += 1
-			else:
+			if clf == 0:
 				neg += 1
 
 			f.write(str(clf)+'\n')

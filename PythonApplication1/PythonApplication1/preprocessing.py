@@ -5,7 +5,7 @@ import nltk
 from string import digits
 from time import time
 
-FILE = "hneg"
+FILE = "pik"
 
 POSITIVES = set()
 NEGATIVES = set()
@@ -81,8 +81,8 @@ def process(file = FILE):
 
     for line in data:
         linecount += 1
-        #text = get_text(line)
-        text = line
+        text = get_text(line)
+        #text = line
         result = prep(text)
         if (result == []):
             removed += 1
@@ -127,7 +127,7 @@ def prep(string):
 def tokenize(string):
     list = re.split("\W+|_", string)
     tokenized = [x.lower() for x in list]
-    #tokenized = filter(tokenized)
+    tokenized = filter(tokenized)
     if (tokenized == []):
         return []
     i = 0

@@ -78,12 +78,9 @@ def neural_network_model(data, size):
 	return output
 
 def train_neural_network(train, test, epochCount):
-	print("---train neural")
-	print("making lexicon")
 	allLines = [row[0] for row in train]
 	lexicon = make_Lexicon(allLines)
 
-	print("making features")
 	train_features = makeFeatures(train, lexicon)
 	test_features = makeFeatures(test, lexicon)
 
@@ -92,9 +89,6 @@ def train_neural_network(train, test, epochCount):
 	
 	test_x = [row[0] for row in test_features]
 	test_y = [row[1] for row in test_features]
-
-	print("making graph")
-
 	size = len(lexicon)
 
 	x = tf.placeholder('float', [None, size])
@@ -104,8 +98,7 @@ def train_neural_network(train, test, epochCount):
 
 	cost = tf.reduce_mean( tf.nn.softmax_cross_entropy_with_logits(logits=prediction, labels=y) )
 	optimizer = tf.train.AdamOptimizer().minimize(cost)
-	
-	print("---starting training")
+
 	hm_epochs = epochCount
 	percent = 0
 	with tf.Session() as sess:
@@ -124,16 +117,13 @@ def train_neural_network(train, test, epochCount):
 
 				i += batch_size
 
-			print('Epoch', epoch+1, 'completed out of',hm_epochs,'loss:',epoch_loss)
+			#print('Epoch', epoch+1, 'completed out of',hm_epochs,'loss:',epoch_loss)
 
 		correct = tf.equal(tf.argmax(prediction, 1), tf.argmax(y, 1))
 
-		
-		print("---starting test")
 		time_start = main.getTime()
 		accuracy = tf.reduce_mean(tf.cast(correct, 'float'))
 		percent = accuracy.eval({x:test_x, y:test_y})
 		time_end = main.getTime()
-		print("Neural time elapsed: " + str(time_end - time_start))
-	print("returning result")
+		#print("Neural time elapsed: " + str(time_end - time_start))
 	return percent
