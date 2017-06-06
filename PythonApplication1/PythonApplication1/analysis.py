@@ -1,7 +1,7 @@
 import PythonApplication1 as main
 import random as r
 
-from simple import *
+import simple as simple
 from bayes import *
 from neural import *
 
@@ -16,10 +16,10 @@ def testRandom(testingSize=0.1, size=1500000):
 
 def testSimple(testingSize=0.1, size=1500000, neu=main.FILE_bow_neu, pos=main.FILE_bow_pos, neg=main.FILE_bow_neg):
 	train,test = main.make_lexicon(testingSize,size)
-	model = simple.train_simple(pos,neg)
+	model = simple.train_simple(neg,pos,neu)
 	results = simple.test_simple(model, [row[0] for row in test])
 	percent = compareResults(results, [row[1] for row in test])
-	print(percent)
+	return percent
 
 def testBayes(testingSize=0.1, size=1500000):
 	train,test = main.make_lexicon(testingSize,size)

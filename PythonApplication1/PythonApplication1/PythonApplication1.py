@@ -87,15 +87,13 @@ if __name__ == '__main__':
 	#startData()
 	#analysis()
 	#train_neural_network()
-
 	#testRandom()
-	#testSimple()
 	for x in range(1, 16):
 		x *= 100
 		j = 0
 		count = 100
 		for i in range(0, count):
-			j += testBayes(size = x)
+			j += testSimple(size = x)
 		j = j/count
 		print(j)
 		print("x = " + str(x) + ", accuracy = " + str(j))
