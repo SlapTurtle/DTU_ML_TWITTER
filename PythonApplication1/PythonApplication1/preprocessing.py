@@ -5,7 +5,7 @@ import nltk
 from string import digits
 from time import time
 
-FILE = "pik"
+FILE = "2017May04"
 
 POSITIVES = set()
 NEGATIVES = set()
@@ -51,7 +51,7 @@ def processMar():
 
 
 def processMay():
-    for date in range(10,22):
+    for date in range(5,10):
         try:
             zero = "0" if date < 10 else ""
             process("2017May" + zero + str(date))
@@ -59,6 +59,9 @@ def processMay():
             print("Date " + str(date) + " not found")
             pass
 
+def processDataSet():
+	for h in ["hneg", "hpos", "hneu"]:
+		process(h)
 
 def process(file = FILE):
     global POSITIVES, NEGATIVES, NOISE, TAGS

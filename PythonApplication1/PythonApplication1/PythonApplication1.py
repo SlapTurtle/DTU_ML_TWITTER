@@ -82,20 +82,10 @@ def make_lexicon(testingSize, totalSize):
 	return train,test
 
 if __name__ == '__main__':
-	#parseSet()
-	#process()
+	processDataSet()
+	testModelScaling()
 	#startData()
-	#analysis()
 	#train_neural_network()
 	#testRandom()
-	for x in range(1, 16):
-		x *= 100
-		j = 0
-		count = 100
-		for i in range(0, count):
-			j += testSimple(size = x)
-		j = j/count
-		print(j)
-		print("x = " + str(x) + ", accuracy = " + str(j))
 	#bayesOnFolder(main.PRE_PATH)
 	#bayesOnFolder(main.FILTER_PATH)

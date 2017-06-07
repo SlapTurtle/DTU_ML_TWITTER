@@ -7,6 +7,17 @@ from neural import *
 
 from os import walk
 
+def testModelScaling():
+	for x in range(1, 16):
+		x *= 100
+		j = 0
+		count = 100
+		for i in range(0, count):
+			j += testSimple(size = x)
+		j = j/count
+		print(j)
+		print("x = " + str(x) + ", accuracy = " + str(j))
+
 def testRandom(testingSize=0.1, size=1500000):
 	train,test = main.make_lexicon(testingSize,size)
 	model = None
