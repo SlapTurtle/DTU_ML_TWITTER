@@ -14,7 +14,7 @@ def make_Lexicon(allLines):
 		for word in words:
 			tmpLex.append(word)
 
-	print(len(tmpLex))
+	#print(len(tmpLex))
 
 	count = Counter(tmpLex)
 	i = 0
@@ -23,7 +23,7 @@ def make_Lexicon(allLines):
 			retLex[word] = i
 			i += 1
 
-	print(len(retLex))
+	#print(len(retLex))
 
 	return retLex
 

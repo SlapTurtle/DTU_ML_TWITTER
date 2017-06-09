@@ -1,6 +1,6 @@
 import PythonApplication1 as main
 
-def train_simple(neg,pos,neu):
+def train_simple(neg,pos,neu, percent = 1.0):
 	NEUTRALS = set(main.loadFile(neu))
 	POSITIVES = set(main.loadFile(pos))
 	NEGATIVES = set(main.loadFile(neg))
