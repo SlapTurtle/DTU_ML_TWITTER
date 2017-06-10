@@ -96,7 +96,7 @@ def testModelScalingNeural(count = 100):
 		print("x = " + str(x) + ", accuracy = " + str(j) + ", avg. of "+str(count)+" runs")
 	print("-----------------")
 
-def testModelScalingAll(count=10, skip=1, gram=2):
+def testModelScalingAll(count=100, skip=1, gram=2):
 	p = []
 	for x in range(1,17):
 		if x < 16:
@@ -156,32 +156,32 @@ def testAll(testingSize=0.1, size=1555, pc=1.0, neu=main.FILE_bow_neu, pos=main.
 	for _ in range(len(test)):
 		results.append(r.randint(0,2))
 	percent = compareResults(results, [row[1] for row in test])
-	print(percent)
+	#print(percent)
 	eval.append(['random', percent])
 
 	model = simple.train_simple(neg,pos,neu,pc)
 	results = simple.test_simple(model, [row[0] for row in test])
 	percent = compareResults(results, [row[1] for row in test])
-	print(percent)
+	#print(percent)
 	eval.append(['simple', percent])
 
 	model = bayes.train_bayes(train)
 	results = bayes.test_bayes(model, [row[0] for row in test])
 	percent = compareResults(results, [row[1] for row in test])
-	print(percent)
+	#print(percent)
 	eval.append(["bayesS"+str(skip)+"G"+str(gram), percent])
 
 	model = bayes_skipgram.train_bayes_skipgram(train, skip, gram)
 	results = bayes_skipgram.test_bayes_skipgram(model, [row[0] for row in test], skip, gram)
 	percent = compareResults(results, [row[1] for row in test])
-	print(percent)
+	#print(percent)
 	eval.append(['bayes', percent])
 
 	percent = neural.train_neural_network(train, test, epochCount)
-	print(percent)
+	#print(percent)
 	eval.append(['neural', percent])
 
-	print(str([testingSize, size, eval]))
+	#print(str([testingSize, size, eval]))
 	return [testingSize, size, eval]
 
 def compareResults(modeltest, actualtest):
