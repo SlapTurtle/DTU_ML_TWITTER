@@ -101,7 +101,7 @@ def testModelScalingAll(count=10, skip=1, gram=2):
 		for i in range(count):
 			list = testAll(size=x, pc=x/1555, skip=skip, gram=gram)
 			for k in range(len(j)):
-				j[k] = list[2][k][1]/count
+				j[k] += list[2][k][1]
 		for k in range(len(j)):
 			j[k] = j[k]/count
 		print("size = " + str(x) + ", accuracy(r,s,b,bsg,n) = " + str(j) + ", avg. of "+str(count)+" runs")
