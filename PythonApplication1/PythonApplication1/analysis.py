@@ -8,6 +8,15 @@ import neural
 
 from os import walk
 
+def testBayesSkipgramScaling(count = 100):
+	for i in range(0,5):
+		for j in range(1,5):
+			p = 0
+			for k in range(count):
+				p += testBayesSkipgram(skip=i, gram=j)
+			p = p/count
+			print("bayesS"+str(i)+"G"+str(j)+", size = 1555, accuracy="+str(p) + ", avg. of "+str(count)+" runs")
+
 def testModelScalingSimple(count = 100):
 	p = []
 	for x in range(1, 17):
@@ -19,11 +28,11 @@ def testModelScalingSimple(count = 100):
 		for i in range(count):
 			j += testSimple(size = x, percent = x/1555 )
 		j = j/count
-		#print("size = " + str(x/1555*6784) + ", accuracy = " + str(j)  + ", avg. of "+str(count)+"runs")
+		#print("size = " + str(x/1555*6784) + ", accuracy = " + str(j)  + ", avg. of "+str(count)+" runs")
 		p.append((x,j))
 	print("------Simple------")
 	for x,j in p:
-		print("size = " + str(x/1555*6784) + ", accuracy = " + str(j) + ", avg. of "+str(count)+"runs")
+		print("size = " + str(x/1555*6784) + ", accuracy = " + str(j) + ", avg. of "+str(count)+" runs")
 	print("-----------------")
 
 def testModelScalingBayes(count = 100):
@@ -37,11 +46,11 @@ def testModelScalingBayes(count = 100):
 		for i in range(count):
 			j += testBayes(size = x)
 		j = j/count
-		#print("size = " + str(x) + ", accuracy = " + str(j) + ", avg. of "+str(count)+"runs")
+		#print("size = " + str(x) + ", accuracy = " + str(j) + ", avg. of "+str(count)+" runs")
 		p.append((x,j))
 	print("------Bayes------")
 	for x,j in p:
-		print("size = " + str(x) + ", accuracy = " + str(j) + ", avg. of "+str(count)+"runs")
+		print("size = " + str(x) + ", accuracy = " + str(j) + ", avg. of "+str(count)+" runs")
 	print("-----------------")
 
 def testModelScalingBayesSkipgram(count = 100, skip=1, gram=2):
@@ -56,11 +65,11 @@ def testModelScalingBayesSkipgram(count = 100, skip=1, gram=2):
 		for i in range(count):
 			j += testBayesSkipgram(skip, gram, size = x)
 		j = j/count
-		#print("size = " + str(x) + ", accuracy = " + str(j) + ", avg. of "+str(count)+"runs")
+		#print("size = " + str(x) + ", accuracy = " + str(j) + ", avg. of "+str(count)+" runs")
 		p.append((x,j))
 	print("----BayesS"+str(skip)+"G"+str(gram)+"----")
 	for x,j in p:
-		print("size = " + str(x) + ", accuracy = " + str(j)  + ", avg. of "+str(count)+"runs")
+		print("size = " + str(x) + ", accuracy = " + str(j)  + ", avg. of "+str(count)+" runs")
 	print("-----------------")
 
 def testModelScalingNeural(count = 100):
@@ -74,11 +83,11 @@ def testModelScalingNeural(count = 100):
 		for i in range(count):
 			j += testNeural(size = x)
 		j = j/count
-		#print("x = " + str(x) + ", accuracy = " + str(j) + ", avg. of "+str(count)+"runs")
+		#print("x = " + str(x) + ", accuracy = " + str(j) + ", avg. of "+str(count)+" runs")
 		p.append((x,j))
 	print("------Neural------")
 	for x,j in p:
-		print("x = " + str(x) + ", accuracy = " + str(j) + ", avg. of "+str(count)+"runs")
+		print("x = " + str(x) + ", accuracy = " + str(j) + ", avg. of "+str(count)+" runs")
 	print("-----------------")
 
 def testModelScalingAll(count=10, skip=1, gram=2):
@@ -95,7 +104,7 @@ def testModelScalingAll(count=10, skip=1, gram=2):
 				j[k] = list[2][k][1]/count
 		for k in range(len(j)):
 			j[k] = j[k]/count
-		print("size = " + str(x) + ", accuracy(r,s,b,bsg,n) = " + str(j) + ", avg. of "+str(count)+"runs")
+		print("size = " + str(x) + ", accuracy(r,s,b,bsg,n) = " + str(j) + ", avg. of "+str(count)+" runs")
 
 def testRandom(testingSize=0.1, size=1555):
 	train,test = main.make_lexicon(testingSize,size)
