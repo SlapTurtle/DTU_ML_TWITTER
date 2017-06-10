@@ -25,6 +25,7 @@
     <Compile Include="analysis.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="bayes_skipgram.py" />
     <Compile Include="neural.py" />
     <Compile Include="dataGathering.py">
       <SubType>Code</SubType>

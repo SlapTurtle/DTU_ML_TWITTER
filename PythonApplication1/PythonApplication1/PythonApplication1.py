@@ -99,8 +99,10 @@ def make_lexicon(testingSize, totalSize):
 if __name__ == '__main__':
 	#processDataSet()
 	testModelScalingSimple()
-	testModelScalingBayes()
-	testModelScalingNeural()
+	#testModelScalingBayes()
+	#testModelScalingBayesSkipgram()
+	#testModelScalingNeural()
+	#testModelScalingAll()
 	#startData()
 	#train_neural_network()
 	#testRandom()

@@ -8,12 +8,13 @@ def train_bayes(data):
 	neuWords = []
 
 	for line,clf in data:
+		list = line.split(' ')
 		if clf == 2:
-			neuWords.extend(line.split(' '))
+			neuWords.extend(list)
 		elif clf == 1:
-			posWords.extend(line.split(' '))
+			posWords.extend(list)
 		elif clf == 0:
-			negWords.extend(line.split(' '))
+			negWords.extend(list)
 		else:
 			print('ERROR')
 
