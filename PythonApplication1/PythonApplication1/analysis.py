@@ -9,8 +9,8 @@ import neural
 from os import walk
 
 def testBayesSkipgramScaling(count = 100):
-	for j in range(0,5):
-		for i in range(1,5):
+	for j in range(1,5):
+		for i in range(0,5):
 			p = 0
 			for k in range(count):
 				p += testBayesSkipgram(skip=i, gram=j)
