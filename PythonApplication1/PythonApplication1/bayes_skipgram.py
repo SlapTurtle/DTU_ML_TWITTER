@@ -67,7 +67,6 @@ def train_bayes_skipgram(data, skip, gram):
 			negSet[word] = 0.0
 		lexicon[word] = [float(negSet[word]) / float(count), float(posSet[word]) / float(count), float(neuSet[word]) / float(count)]
 
-	
 	return lexicon
 
 def test_bayes_skipgram(model, data, skip, gram):
