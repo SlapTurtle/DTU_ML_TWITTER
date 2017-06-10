@@ -9,7 +9,13 @@ import neural
 from os import walk
 
 def testBayesSkipgramScaling(count = 100):
-	for j in range(1,5):
+	p = 0
+	for i in range(count):
+		p += testBayes()
+	p = p/count
+	print("bayesS0G1, size = 1555, accuracy="+str(p) + ", avg. of "+str(count)+" runs")
+
+	for j in range(2,5):
 		for i in range(0,5):
 			p = 0
 			for k in range(count):
