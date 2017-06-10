@@ -110,7 +110,7 @@ def testModelScalingAll(count=10, skip=1, gram=2):
 				j[k] += list[2][k][1]
 		for k in range(len(j)):
 			j[k] = j[k]/count
-		print("size = " + str(x) + ", accuracy(r,s,b,bsg,n) = " + str(j) + ", avg. of "+str(count)+" runs")
+		print("size = " + str(x) + ", accuracy(r,s,b,bs"+str(skip)+"g"+str(gram)+",n) = " + str(j) + ", avg. of "+str(count)+" runs")
 
 def testRandom(testingSize=0.1, size=1555):
 	train,test = main.make_lexicon(testingSize,size)
