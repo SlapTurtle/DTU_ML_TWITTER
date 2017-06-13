@@ -85,11 +85,10 @@ def single_sample_bayes_skipgram(model, line, skip, gram):
 	cp = [1/3,1/3,1/3]
 	for clf in range(len(cp)):
 		for word in words:
-			if word in model:
-				if(model[word][clf] != 0):
-					cp[clf] *= model[word][clf]
-				else:
-					cp[clf] *= 1/len(model.keys())
+			if word in model and model[word][clf] != 0:
+				cp[clf] *= model[word][clf]
+			else:
+				cp[clf] *= 1 / (len(model.keys()) + 1) 
 
 	if cp[0] == cp[1]:
 		return 2

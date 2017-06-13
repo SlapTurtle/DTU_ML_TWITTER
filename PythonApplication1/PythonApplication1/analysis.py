@@ -63,7 +63,7 @@ def testModelScalingBayes(count = 100):
 
 def testModelScalingBayesSkipgram(count = 100, skip=1, gram=2):
 	#p = []
-	print("----BayesS"+str(skip)+"G"+str(gram)+"----")
+	print("----Bayes"+str(skip)+"S"+str(gram)+"G----")
 	for x in range(1,17):
 		if x < 16:
 			x *= 100
@@ -73,9 +73,8 @@ def testModelScalingBayesSkipgram(count = 100, skip=1, gram=2):
 		for i in range(count):
 			k = testBayesSkipgram(size = x, skip=skip, gram=gram)
 			j += k
-			#print(k, end=', ')
 		j = j/count
-		print('\n', "size = " + str(x) + ", accuracy = " + str(j) + ", avg. of "+str(count)+" runs")
+		print("size = " + str(x) + ", accuracy = " + str(j) + ", avg. of "+str(count)+" runs")
 		#p.append((x,j))
 	#for x,j in p:
 	#	print("size = " + str(x) + ", accuracy = " + str(j)  + ", avg. of "+str(count)+" runs")
