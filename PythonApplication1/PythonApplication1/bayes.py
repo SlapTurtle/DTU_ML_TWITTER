@@ -35,10 +35,6 @@ def train_bayes(data):
 			negSet[word] = 0.0
 		lexicon[word] = [float(negSet[word]) / float(count), float(posSet[word]) / float(count), float(neuSet[word]) / float(count)]
 
-	#microsoft = lexicon["microsoft"]
-	#print("Microsoft: " + str(microsoft))
-	#msft = lexicon["msft"]
-	#print("MSFT: " + str(msft))
 	return lexicon
 
 def test_bayes(model, data):
@@ -54,11 +50,14 @@ def test_bayes(model, data):
 
 def single_sample_bayes(model, line):
 	words = line.split(' ')
-	cp = [1/3, 1/3, 1/3]
+	cp = [1/3,1/3,1/3]
 	for clf in range(len(cp)):
 		for word in words:
 			if word in model:
-				cp[clf] *= model[word][clf]
+				if(model[word][clf] != 0):
+					cp[clf] *= model[word][clf]
+				else:
+					cp[clf] *= 1/len(model.keys())
 
 	if cp[0] == cp[1]:
 		return 2

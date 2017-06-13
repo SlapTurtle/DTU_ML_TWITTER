@@ -4,7 +4,8 @@ from collections import Counter
 import PythonApplication1 as main
 
 def make_Lexicon(allLines):
-	upper,lower = 1000,50 #Optimize this
+	#upper,lower = 1000,50 #Optimize this
+	upper,lower = 50,2
 
 	retLex = dict()
 	tmpLex = []
@@ -13,17 +14,16 @@ def make_Lexicon(allLines):
 		words = line.replace('\n','').split(' ')
 		for word in words:
 			tmpLex.append(word)
-
-	#print(len(tmpLex))
-
+	
 	count = Counter(tmpLex)
+	#print(str(count))
 	i = 0
 	for word in count:
 		if upper > count[word] > lower:
 			retLex[word] = i
 			i += 1
 
-	#print(len(retLex))
+	#print(str(retLex))
 
 	return retLex
 
@@ -48,7 +48,7 @@ n_nodes_hl2 = 500
 n_nodes_hl3 = 500
 
 n_classes = 3
-batch_size = 1000
+batch_size = 50
 
 def neural_network_model(data, size):
 	hidden_1_layer = {'weights':tf.Variable(tf.random_normal([size, n_nodes_hl1])),

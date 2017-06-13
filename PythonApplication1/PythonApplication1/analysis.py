@@ -42,7 +42,8 @@ def testModelScalingSimple(count = 100):
 	print("-----------------")
 
 def testModelScalingBayes(count = 100):
-	p = []
+	#p = []
+	print("------Bayes------")
 	for x in range(1,17):
 		if x < 16:
 			x *= 100
@@ -50,18 +51,19 @@ def testModelScalingBayes(count = 100):
 			x = 1555
 		j = 0
 		for i in range(count):
-			j += testBayes(size = x)
+			k = testBayes(size = x)
+			j += k
+			#print(k, end=', ')
 		j = j/count
-		#print("size = " + str(x) + ", accuracy = " + str(j) + ", avg. of "+str(count)+" runs")
-		p.append((x,j))
-	print("------Bayes------")
-	for x,j in p:
-		print("size = " + str(x) + ", accuracy = " + str(j) + ", avg. of "+str(count)+" runs")
+		print('\n', "size = " + str(x) + ", accuracy = " + str(j) + ", avg. of "+str(count)+" runs")
+		#p.append((x,j))
+	#for x,j in p:
+	#	print("size = " + str(x) + ", accuracy = " + str(j) + ", avg. of "+str(count)+" runs")
 	print("-----------------")
 
 def testModelScalingBayesSkipgram(count = 100, skip=1, gram=2):
-	p = []
-	
+	#p = []
+	print("----BayesS"+str(skip)+"G"+str(gram)+"----")
 	for x in range(1,17):
 		if x < 16:
 			x *= 100
@@ -69,16 +71,17 @@ def testModelScalingBayesSkipgram(count = 100, skip=1, gram=2):
 			x = 1555
 		j = 0
 		for i in range(count):
-			j += testBayesSkipgram(skip, gram, size = x)
+			k = testBayesSkipgram(size = x, skip=skip, gram=gram)
+			j += k
+			#print(k, end=', ')
 		j = j/count
-		#print("size = " + str(x) + ", accuracy = " + str(j) + ", avg. of "+str(count)+" runs")
-		p.append((x,j))
-	print("----BayesS"+str(skip)+"G"+str(gram)+"----")
-	for x,j in p:
-		print("size = " + str(x) + ", accuracy = " + str(j)  + ", avg. of "+str(count)+" runs")
+		print('\n', "size = " + str(x) + ", accuracy = " + str(j) + ", avg. of "+str(count)+" runs")
+		#p.append((x,j))
+	#for x,j in p:
+	#	print("size = " + str(x) + ", accuracy = " + str(j)  + ", avg. of "+str(count)+" runs")
 	print("-----------------")
 
-def testModelScalingNeural(count = 100):
+def testModelScalingNeural(count = 10):
 	p = []
 	for x in range(1,17):
 		if x < 16:
@@ -87,16 +90,18 @@ def testModelScalingNeural(count = 100):
 			x = 1555
 		j = 0
 		for i in range(count):
-			j += testNeural(size = x)
+			k = testNeural(size = x)
+			j += k
+			print(k, end=', ')
 		j = j/count
-		#print("x = " + str(x) + ", accuracy = " + str(j) + ", avg. of "+str(count)+" runs")
+		print('\n', "x = " + str(x) + ", accuracy = " + str(j) + ", avg. of "+str(count)+" runs")
 		p.append((x,j))
 	print("------Neural------")
 	for x,j in p:
 		print("x = " + str(x) + ", accuracy = " + str(j) + ", avg. of "+str(count)+" runs")
 	print("-----------------")
 
-def testModelScalingAll(count=100, skip=1, gram=2):
+def testModelScalingAll(count=10, skip=1, gram=2):
 	p = []
 	for x in range(1,17):
 		if x < 16:
