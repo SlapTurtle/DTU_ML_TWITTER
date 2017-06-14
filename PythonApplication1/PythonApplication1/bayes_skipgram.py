@@ -98,8 +98,8 @@ def single_sample_bayes_skipgram(model, line, skip, gram):
 		return 0 if cp[0] >= cp[2] else 2
 
 def use_bayes_skipgram(model, data, filename, skip, gram):
-	res = test_bayes_skipgram(model, data. skip, gram)
-	dp = main.getDataPath(main.RES_PATH + filename, endtag="_bS"+str(skip)+"G"+str(gram)+".txt")
+	res = test_bayes_skipgram(model, data, skip, gram)
+	dp = main.getDataPath(main.RES_PATH + filename, endtag="_b"+str(skip)+"S"+str(gram)+"G.txt")
 
 	pos = 0
 	neg = 0

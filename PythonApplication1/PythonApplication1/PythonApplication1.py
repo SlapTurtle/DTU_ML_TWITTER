@@ -5,9 +5,15 @@ RES_PATH = 'Res\\'
 FILTER_PATH = 'Filter\\'
 
 FILE_tag = 'searchtags'
+
+#FILE_neu = 'm_neu_large_p'
+#FILE_pos = 'm_pos_large_p' 
+#FILE_neg = 'm_neg_large_p'
+
 FILE_neu = "hneu_p"
 FILE_pos = "hpos_p"
 FILE_neg = "hneg_p"
+
 FILE_bow_neu = 'neutrals'
 FILE_bow_pos = 'positives'
 FILE_bow_neg = 'negatives'
@@ -99,12 +105,17 @@ def make_lexicon(testingSize, totalSize):
 if __name__ == '__main__':
 	#processDataSet()
 	#testModelScalingSimple()
-	testModelScalingBayes(count = 10)
-	testModelScalingBayesSkipgram(count = 10, skip = 0, gram = 2)
-	testModelScalingBayesSkipgram(count = 10, skip = 1, gram = 2)
-	#testModelScalingNeural()
+	#testModelScalingBayesSkipgram(count = 100, skip = 0, gram = 1)
+	#testModelScalingBayesSkipgram(count = 100, skip = 0, gram = 2)
+	#testModelScalingBayesSkipgram(count = 100, skip = 1, gram = 2)
+	#testModelScalingBayesSkipgram(count = 100, skip = 2, gram = 2)
+	#testModelScalingBayesSkipgram(count = 100, skip = 3, gram = 2)
+	#testModelScalingBayesSkipgram(count = 100, skip = 4, gram = 2)
+	#testModelScalingBayesSkipgram(count = 100, skip = 5, gram = 2)
+	#testNeural(size = 1)
+	testModelScalingNeural(20)
 	#testModelScalingAll()
-	#testBayesSkipgramScaling()
+	#testBayesSkipgramScaling(size = 1500000)
 	#startData()
 	#train_neural_network()
 	#testRandom()
