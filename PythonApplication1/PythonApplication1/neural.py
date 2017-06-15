@@ -5,7 +5,7 @@ import PythonApplication1 as main
 
 def make_Lexicon(allLines):
 	#upper,lower = 1000,50 #Optimize this
-	upper,lower = 50,2
+	upper,lower = 45,3
 
 	retLex = dict()
 	tmpLex = []
@@ -16,7 +16,6 @@ def make_Lexicon(allLines):
 			tmpLex.append(word)
 	
 	count = Counter(tmpLex)
-	#print(str(count))
 	i = 0
 	for word in count:
 		if upper > count[word] > lower:

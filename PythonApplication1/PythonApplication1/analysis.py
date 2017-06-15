@@ -8,20 +8,20 @@ import neural
 
 from os import walk
 
-def testBayesSkipgramScaling(count = 100):
-	p = 0
-	for i in range(count):
-		p += testBayes()
-	p = p/count
-	print("bayesS0G1, size = 1555, accuracy="+str(p) + ", avg. of "+str(count)+" runs")
+def testBayesSkipgramScaling(count = 1, size = 1500000):
+	#p = 0
+	#for i in range(count):
+	#	p += testBayesSkipgram(size = size, skip = 0, gram = 1)
+	#p = p/count
+	#print("bayes0S1G, size = "+str(size)+", accuracy="+str(p) + ", avg. of "+str(count)+" runs")
 
 	for j in range(2,5):
-		for i in range(0,5):
+		for i in range(2,5):
 			p = 0
 			for k in range(count):
-				p += testBayesSkipgram(skip=i, gram=j)
+				p += testBayesSkipgram(size = size, skip=i, gram=j)
 			p = p/count
-			print("bayesS"+str(i)+"G"+str(j)+", size = 1555, accuracy="+str(p) + ", avg. of "+str(count)+" runs")
+			print("bayes"+str(i)+"S"+str(j)+"G, size = "+str(size)+", accuracy="+str(p) + ", avg. of "+str(count)+" runs")
 
 def testModelScalingSimple(count = 100):
 	p = []
@@ -81,8 +81,9 @@ def testModelScalingBayesSkipgram(count = 100, skip=1, gram=2):
 	print("-----------------")
 
 def testModelScalingNeural(count = 10):
-	p = []
-	for x in range(1,17):
+	#p = []
+	print("------Neural------")
+	for x in range(10,17):
 		if x < 16:
 			x *= 100
 		else:
@@ -91,13 +92,11 @@ def testModelScalingNeural(count = 10):
 		for i in range(count):
 			k = testNeural(size = x)
 			j += k
-			print(k, end=', ')
 		j = j/count
-		print('\n', "x = " + str(x) + ", accuracy = " + str(j) + ", avg. of "+str(count)+" runs")
-		p.append((x,j))
-	print("------Neural------")
-	for x,j in p:
 		print("x = " + str(x) + ", accuracy = " + str(j) + ", avg. of "+str(count)+" runs")
+	#	p.append((x,j))
+	#for x,j in p:
+	#	print("x = " + str(x) + ", accuracy = " + str(j) + ", avg. of "+str(count)+" runs")
 	print("-----------------")
 
 def testModelScalingAll(count=10, skip=1, gram=2):
@@ -141,12 +140,17 @@ def testBayes(testingSize=0.1, size=1555):
 
 def testBayesSkipgram(testingSize=0.1, size=1555, skip=1, gram=2):
 	train,test = main.make_lexicon(testingSize,size)
+	time_start = main.getTime()
 	model = bayes_skipgram.train_bayes_skipgram(train, skip, gram)
+	time_1 = main.getTime()
+	print("Bayes time elapsed: " + str(time_1 - time_start))
 	results = bayes_skipgram.test_bayes_skipgram(model, [row[0] for row in test], skip, gram)
+	time_end = main.getTime()
+	print("Bayes time elapsed: " + str(time_end - time_1))
 	percent = compareResults(results, [row[1] for row in test])
 	return percent
 
-def testNeural(testingSize=0.1, size=1555, epochCount=10):
+def testNeural(testingSize=0.1, size=1555, epochCount=20):
 	train,test = main.make_lexicon(testingSize,size)
 	return neural.train_neural_network(train, test, epochCount)
 
