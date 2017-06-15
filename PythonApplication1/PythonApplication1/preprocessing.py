@@ -1,7 +1,6 @@
 import PythonApplication1 as main
 import re
 import nltk
-
 from string import digits
 from time import time
 
@@ -12,17 +11,15 @@ NEGATIVES = set()
 NOISE = set()
 TAGS = set()
 
+# process generalised data-set
 def parseSet(file = "SentimentAnalysisDataset"):
 	global POSITIVES, NEGATIVES, NOISE, TAGS
 
 	NOISE = set(["rt", "n", "i", "u", "it", "its", "us", "we", "you", "me", "they", "your", "my", "on", "of", "in", "by", "at", "to", "from", "for", "a", "an", "im", "r", "this", "those", "that", "them", "the"])
 	TAGS = getTags()
-
 	time_start = time()
-
 	POSITIVES = set(main.loadFile("positives"))
 	NEGATIVES = set(main.loadFile("negatives"))
-
 	clearfile("ds_pos")
 	clearfile("ds_neg")
 	time_start = time()
@@ -39,65 +36,51 @@ def parseSet(file = "SentimentAnalysisDataset"):
 					if(j == 1):
 						pos = (line[i+1] == '1')                 
 				i += 1
-
 			ds = "ds_pos_p" if pos else "ds_neg_p"
 			with open(main.getDataPath(ds), "a") as fi:
 				res = prep(line[i:])[:-2]
 				if res != []:
 					fi.write(str(res) + "\n")
 			k += 1
-
 			if k % 1000 == 0:
 				print("Finished " + str(k))
 	time_end = time()
 	print("Processed " + file + " in " + (str)(time_end - time_start)[:4] + "s")
 
-
-def processMar():
-	for date in range(17,32):
-		try:
-			process("2017Mar" + str(date))
-		except:
-			print("Date " + str(date) + " not found")
-			pass
-
-
-def processMay():
+# process an entire month
+def processMonth(month = "Mar"):
 	for date in range(21,32):
 		try:
 			zero = "0" if date < 10 else ""
-			process("2017May" + zero + str(date))
+			process("2017" + month + zero + str(date))
 		except:
 			print("Date " + str(date) + " not found")
 			pass
 
+# process specialised data-set if placed in Raw
 def processDataSet():
 	for h in ["hneg", "hpos", "hneu"]:
 		process(h)
 
+# pre-process file given as input
 def process(file = FILE):
 	global POSITIVES, NEGATIVES, NOISE, TAGS
 
 	NOISE = set(["rt", "n", "i", "u", "it", "its", "us", "we", "you", "me", "they", "your", "my", "on", "of", "in", "by", "at", "to", "from", "for", "a", "an", "im", "r", "this", "those", "that", "them", "the"])
 	TAGS = getTags()
-
 	time_start = time()
 	data = open(main.getDataPath(main.RAW_PATH + file))
 	clearfile(main.PRE_PATH + file)
-
 	recent = [""] * 40
 	index = 0
-
 	POSITIVES = set(main.loadFile("positives"))
 	NEGATIVES = set(main.loadFile("negatives"))
-
 	linecount = 0
 	removed = 0
-
 	for line in data:
 		linecount += 1
-		#text = get_text(line)
-		text = line
+		text = get_text(line)
+		#text = line			# use this if data is not raw
 		result = prep(text)
 		if (result == []):
 			removed += 1
@@ -105,7 +88,7 @@ def process(file = FILE):
 		spam = False
 		for r in recent:
 			if result == r:
-				#spam = True
+				spam = True		# comment this out to disable spam filter
 				break
 		if not spam:
 			filedump(result + "\n", file)
@@ -114,19 +97,18 @@ def process(file = FILE):
 				index = index + 1
 			else:
 				index = 0
-
 	time_end = time()
 	print("Processed " + file + " in " + (str)(time_end - time_start)[:4] + "s")
 	print(str(removed) + " of " + str(linecount) + " lines filtered out\n")
 
 
-# get text from data string
+# get text from raw tweet
 def get_text(string):
 	string = string.replace('\"', "'", 1)
 	date, text = string.split("'", 1)
 	return text[:-1]
 
-# prep
+# tokenize + alter prolonged words
 def prep(string):
 	tokenized = tokenize(re.sub('[\']', '', string))
 	if (tokenized == []):
@@ -138,7 +120,7 @@ def prep(string):
 	return result[:-1]
 
 
-# cool stuff
+# tokenize + remove digits, common words, links, emojis etc.
 def tokenize(string):
 	list = re.split("\W+|_", string)
 	tokenized = [x.lower() for x in list]
@@ -150,7 +132,6 @@ def tokenize(string):
 		no_digits = str.maketrans('', '', digits)
 		tokenized[i] = tokenized[i].translate(no_digits)
 		word = tokenized[i]
-
 		if (word == "https" or word == "nhttps"):
 			try:
 				for j in range(0,4):
@@ -165,7 +146,6 @@ def tokenize(string):
 		else:
 			i = i + 1
 	return tokenized
-
 
 # alteration of prolonged words + stemming
 def alter_prolonged(list = []):
@@ -191,13 +171,14 @@ def alter_prolonged(list = []):
 			pass
 	return res
 
-#filter
+#filter out certain search tags
 def filter(list):
 	for word in list:
 		if (word in TAGS):
 			return list
 	return []
 
+# get search tags
 def getTags():
 	path = main.getDataPath(main.FILE_tag + "_f")
 	tags = set()
