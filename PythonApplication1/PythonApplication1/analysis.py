@@ -8,15 +8,15 @@ import neural
 
 from os import walk
 
-def testBayesSkipgramScaling(count = 1, size = 1500000):
+def testBayesSkipgramScaling(count = 10, size = 1500000):
 	#p = 0
 	#for i in range(count):
 	#	p += testBayesSkipgram(size = size, skip = 0, gram = 1)
 	#p = p/count
 	#print("bayes0S1G, size = "+str(size)+", accuracy="+str(p) + ", avg. of "+str(count)+" runs")
 
-	for j in range(2,5):
-		for i in range(2,5):
+	for j in range(2,3):
+		for i in range(5,10):
 			p = 0
 			for k in range(count):
 				p += testBayesSkipgram(size = size, skip=i, gram=j)
@@ -41,9 +41,11 @@ def testModelScalingSimple(count = 100):
 		print("size = " + str(x/1555*6784) + ", accuracy = " + str(j) + ", avg. of "+str(count)+" runs")
 	print("-----------------")
 
-def testModelScalingBayes(count = 100):
+def testModelScalingBayes(count = 1):
 	#p = []
 	print("------Bayes------")
+	#for f in [0.05, 0.1, 0.25, 0.50, 0.75, 1.0]:
+	#	x = int(1500000*f)
 	for x in range(1,17):
 		if x < 16:
 			x *= 100
@@ -55,13 +57,13 @@ def testModelScalingBayes(count = 100):
 			j += k
 			#print(k, end=', ')
 		j = j/count
-		print('\n', "size = " + str(x) + ", accuracy = " + str(j) + ", avg. of "+str(count)+" runs")
+		print("size = " + str(x) + ", accuracy = " + str(j) + ", avg. of "+str(count)+" runs")
 		#p.append((x,j))
 	#for x,j in p:
 	#	print("size = " + str(x) + ", accuracy = " + str(j) + ", avg. of "+str(count)+" runs")
 	print("-----------------")
 
-def testModelScalingBayesSkipgram(count = 100, skip=1, gram=2):
+def testModelScalingBayesSkipgram(count = 10, skip=1, gram=2):
 	#p = []
 	print("----Bayes"+str(skip)+"S"+str(gram)+"G----")
 	for x in range(1,17):
@@ -131,10 +133,15 @@ def testSimple(testingSize=0.1, size=1555, percent=1.0, neu=main.FILE_bow_neu, p
 	percent = compareResults(results, [row[1] for row in test])
 	return percent
 
-def testBayes(testingSize=0.1, size=1555):
+def testBayes(testingSize=0.1, size=1500000):
 	train,test = main.make_lexicon(testingSize,size)
+	time_start = main.getTime()
 	model = bayes.train_bayes(train)
+	time_1 = main.getTime()
+	print("Bayes time elapsed: " + str(time_1 - time_start))
 	results = bayes.test_bayes(model, [row[0] for row in test])
+	time_end = main.getTime()
+	print("Bayes time elapsed: " + str(time_end - time_1))
 	percent = compareResults(results, [row[1] for row in test])
 	return percent
 
