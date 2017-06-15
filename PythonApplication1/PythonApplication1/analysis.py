@@ -214,7 +214,7 @@ def bayesOnFolder(endpath):
 	_, _, filenames = next(walk(path))
 	
 	train, _ = main.make_lexicon(0,1555)
-	model = train_bayes(train)
+	model = bayes.train_bayes(train)
 	
 	path += '_results.txt'
 	with open(path, "w") as f:
@@ -224,5 +224,5 @@ def bayesOnFolder(endpath):
 		for name in filenames:
 			if(name != '_results.txt'):
 				data = main.loadFile(endpath+name, endtag='')
-				neg,pos,neu,total = use_bayes(model, data, name[:-4])
+				neg,pos,neu,total = bayes.use_bayes(model, data, name[:-4])
 				f.write(name[:-4] + ',' + str(neg) + ',' + str(pos) + ',' + str(neu) + ',' + str(total) + '\n')
