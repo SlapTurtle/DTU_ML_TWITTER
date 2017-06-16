@@ -1,8 +1,11 @@
-import PythonApplication1 as main
+# ---------------------------------------------------------------------
+# Imports
+# ---------------------------------------------------------------------
+import main
+
 import re
 import nltk
 from string import digits
-from time import time
 
 FILE = "2017May04"
 
@@ -17,12 +20,12 @@ def parseSet(file = "SentimentAnalysisDataset"):
 
 	NOISE = set(["rt", "n", "i", "u", "it", "its", "us", "we", "you", "me", "they", "your", "my", "on", "of", "in", "by", "at", "to", "from", "for", "a", "an", "im", "r", "this", "those", "that", "them", "the"])
 	TAGS = getTags()
-	time_start = time()
+	time_start = main.getTime()
 	POSITIVES = set(main.loadFile("positives"))
 	NEGATIVES = set(main.loadFile("negatives"))
 	clearfile("ds_pos")
 	clearfile("ds_neg")
-	time_start = time()
+	time_start = main.getTime()
 	print("Parsing set . . .")
 	with open(main.getDataPath(file), "r", encoding='utf8') as f:
 		k = 0
@@ -44,7 +47,7 @@ def parseSet(file = "SentimentAnalysisDataset"):
 			k += 1
 			if k % 1000 == 0:
 				print("Finished " + str(k))
-	time_end = time()
+	time_end = main.getTime()
 	print("Processed " + file + " in " + (str)(time_end - time_start)[:4] + "s")
 
 # process an entire month
@@ -68,7 +71,7 @@ def process(file = FILE):
 
 	NOISE = set(["rt", "n", "i", "u", "it", "its", "us", "we", "you", "me", "they", "your", "my", "on", "of", "in", "by", "at", "to", "from", "for", "a", "an", "im", "r", "this", "those", "that", "them", "the"])
 	TAGS = getTags()
-	time_start = time()
+	time_start = main.getTime()
 	data = open(main.getDataPath(main.RAW_PATH + file))
 	clearfile(main.PRE_PATH + file)
 	recent = [""] * 40
@@ -97,7 +100,7 @@ def process(file = FILE):
 				index = index + 1
 			else:
 				index = 0
-	time_end = time()
+	time_end = main.getTime()
 	print("Processed " + file + " in " + (str)(time_end - time_start)[:4] + "s")
 	print(str(removed) + " of " + str(linecount) + " lines filtered out\n")
 

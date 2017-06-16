@@ -1,11 +1,20 @@
-import PythonApplication1 as main
+# ---------------------------------------------------------------------
+# Imports
+# ---------------------------------------------------------------------
+import main
+
 import random as r
 import math
 
-def train_simple(neg,pos,neu, percent = 1.0):
-	neuWords = main.loadFile(neu)
-	posWords = main.loadFile(pos)
-	negWords = main.loadFile(neg)
+# ---------------------------------------------------------------------
+# Simple Model Methods
+# ---------------------------------------------------------------------
+
+# "Trains" a simple model
+def train_simple(negpath, pospath, neupath, percent):
+	neuWords = main.loadFile(neupath)
+	posWords = main.loadFile(pospath)
+	negWords = main.loadFile(negpath)
 	neusize = len(neuWords) * percent
 	possize = len(posWords) * percent
 	negsize = len(negWords) * percent
@@ -17,6 +26,7 @@ def train_simple(neg,pos,neu, percent = 1.0):
 	NEGATIVES = set(negWords[:math.ceil(negsize)])
 	return [NEGATIVES,POSITIVES,NEUTRALS]
 
+# Predicts a dataset using a "trained" simple model
 def test_simple(model, data):
 	results = []
 	time_start = main.getTime()
@@ -26,6 +36,7 @@ def test_simple(model, data):
 	time_end = main.getTime()
 	return results
 
+# Predicts a single sample using a "trained" simple model
 def single_sample_simple(model, line):
 	score = 0
 	neutral_filter,max = 0,2

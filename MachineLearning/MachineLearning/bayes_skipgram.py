@@ -1,6 +1,15 @@
-import PythonApplication1 as main
+# ---------------------------------------------------------------------
+# Imports
+# ---------------------------------------------------------------------
+import main
+
 from collections import Counter
 
+# ---------------------------------------------------------------------
+# Naive Bayes Model Methods
+# ---------------------------------------------------------------------
+
+# Transform a set of words into a k-skip-n-gram set
 def tranform_skipgram(words, skip, gram):
 	list = []
 	for set in recursive_skipgram(words, skip, gram):
@@ -10,6 +19,8 @@ def tranform_skipgram(words, skip, gram):
 		list.append(t)
 	return list 
 
+# Transform a single sentence into a k-skip-n-gram set
+# Note that this method is not perfomance optimised
 def recursive_skipgram(words, skip, gram):
 	allsets = []
 	if gram > 0:
@@ -33,8 +44,8 @@ def recursive_skipgram(words, skip, gram):
 		allsets += recursive_skipgram(words, skip-1, gram)
 	return allsets 	
 
+# Trains a k-skip-n-gram Naive Bayes model
 def train_bayes_skipgram(data, skip, gram):
-	#print("train BayesS"+str(skip)+"G"+str(gram)+"")
 	negWords = []
 	posWords = []
 	neuWords = []
@@ -48,7 +59,7 @@ def train_bayes_skipgram(data, skip, gram):
 		elif clf == 0:
 			negWords.extend(list)
 		else:
-			print('ERROR')
+			raise Exception('Classification has a non-accepted label')
 
 	neuSet = Counter(neuWords)
 	posSet = Counter(posWords)
@@ -69,17 +80,15 @@ def train_bayes_skipgram(data, skip, gram):
 	
 	return lexicon
 
+# Predicts a dataset using a trained 1-gram Naive Bayes model
 def test_bayes_skipgram(model, data, skip, gram):
-	#print("testing BayesS"+str(skip)+"G"+str(gram)+"")
 	results = []
-	time_start = main.getTime()
 	for line in data:
 		res = single_sample_bayes_skipgram(model, line, skip, gram)
 		results.append(res)
-	time_end = main.getTime()
-	#print("BayesS"+str(skip)+"G"+str(gram)+" time elapsed: " + str(time_end - time_start))
 	return results
 
+# Predicts a single sample using a trained 1-gram Naive Bayes model
 def single_sample_bayes_skipgram(model, line, skip, gram):
 	words = tranform_skipgram(line.split(' '), skip, gram)
 	cp = [1/3,1/3,1/3]
@@ -96,27 +105,3 @@ def single_sample_bayes_skipgram(model, line, skip, gram):
 		return 1 if cp[1] >= cp[2] else 2
 	if cp[1] < cp[0]:
 		return 0 if cp[0] >= cp[2] else 2
-
-def use_bayes_skipgram(model, data, filename, skip, gram):
-	res = test_bayes_skipgram(model, data, skip, gram)
-	dp = main.getDataPath(main.RES_PATH + filename, endtag="_b"+str(skip)+"S"+str(gram)+"G.txt")
-
-	pos = 0
-	neg = 0
-	neu = 0
-
-	with open(dp, "w") as f:
-		f.write("")
-
-	with open(dp, "a") as f:
-		for clf in res:
-			if clf == 2:
-				neu += 1
-			if clf == 1:
-				pos += 1
-			if clf == 0:
-				neg += 1
-
-			f.write(str(clf)+'\n')
-
-	return neg,pos,neu,neg+pos+neu

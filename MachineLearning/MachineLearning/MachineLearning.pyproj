@@ -4,14 +4,15 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>ed027c5c-4c6d-4d2e-bb0b-a2cb12fc2ec2</ProjectGuid>
-    <ProjectHome>.</ProjectHome>
-    <StartupFile>PythonApplication1.py</StartupFile>
+    <ProjectHome>
+    </ProjectHome>
+    <StartupFile>main.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
-    <Name>PythonApplication1</Name>
-    <RootNamespace>PythonApplication1</RootNamespace>
+    <Name>MachineLearning</Name>
+    <RootNamespace>MachineLearning</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -34,7 +35,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="preprocessing.py" />
-    <Compile Include="PythonApplication1.py" />
+    <Compile Include="main.py" />
     <Compile Include="simple.py">
       <SubType>Code</SubType>
     </Compile>

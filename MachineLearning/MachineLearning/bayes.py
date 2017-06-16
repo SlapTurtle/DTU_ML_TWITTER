@@ -1,8 +1,16 @@
-import PythonApplication1 as main
+# ---------------------------------------------------------------------
+# Imports
+# ---------------------------------------------------------------------
+import main
+
 from collections import Counter
 
+# ---------------------------------------------------------------------
+# Naive Bayes Model Methods
+# ---------------------------------------------------------------------
+
+# Trains a 1-gram Naive Bayes model
 def train_bayes(data):
-	#print("train bayes")
 	negWords = []
 	posWords = []
 	neuWords = []
@@ -16,7 +24,7 @@ def train_bayes(data):
 		elif clf == 0:
 			negWords.extend(list)
 		else:
-			print('ERROR')
+			raise Exception('Classification has a non-accepted label')
 
 	neuSet = Counter(neuWords)
 	posSet = Counter(posWords)
@@ -37,17 +45,15 @@ def train_bayes(data):
 
 	return lexicon
 
+# Predicts a dataset using a trained 1-gram Naive Bayes model
 def test_bayes(model, data):
-	#print("testing bayes")
 	results = []
-	time_start = main.getTime()
 	for line in data:
 		res = single_sample_bayes(model, line)
 		results.append(res)
-	time_end = main.getTime()
-	#print("Bayes time elapsed: " + str(time_end - time_start))
 	return results
 
+# Predicts a single sample using a trained 1-gram Naive Bayes model
 def single_sample_bayes(model, line):
 	words = line.split(' ')
 	cp = [1/3,1/3,1/3]
@@ -64,27 +70,3 @@ def single_sample_bayes(model, line):
 		return 1 if cp[1] >= cp[2] else 2
 	if cp[1] < cp[0]:
 		return 0 if cp[0] >= cp[2] else 2
-
-def use_bayes(model, data, filename):
-	res = test_bayes(model, data)
-	dp = main.getDataPath(main.RES_PATH + filename, endtag='_b.txt')
-
-	pos = 0
-	neg = 0
-	neu = 0
-
-	with open(dp, "w") as f:
-		f.write("")
-
-	with open(dp, "a") as f:
-		for clf in res:
-			if clf == 2:
-				neu += 1
-			if clf == 1:
-				pos += 1
-			if clf == 0:
-				neg += 1
-
-			f.write(str(clf)+'\n')
-
-	return neg,pos,neu,neg+pos+neu

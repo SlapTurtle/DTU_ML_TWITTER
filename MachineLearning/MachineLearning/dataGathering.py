@@ -1,31 +1,44 @@
-import PythonApplication1 as main
-from TwitterAPI import *
+# ---------------------------------------------------------------------
+# Imports
+# ---------------------------------------------------------------------
+import main
+
 from threading import Thread
 from time import sleep
 
+# Twitter API
+from TwitterAPI import *
+# documentation:	https://github.com/geduldig/TwitterAPI/blob/master/docs/
+# status codes:		https://dev.twitter.com/streaming/overview/connecting
+
+# ---------------------------------------------------------------------
+# Twitter Authentication Keys
+# ---------------------------------------------------------------------
 consumer_key = 'o5aaDQNePqeOwLJpXFC1qeWmL'
 consumer_secret = 'TM8g6A7GveM5wkZahV8ZgILYGHJcChVNVJblAEn6ZdL9gLCVnA'
 access_token_key = '3688759636-pYAsFBCIAFphzdwvNZjrbcydWFLZ2NFogRybaGc'
 access_token_secret = 'hmM8DZAnLMGn7lGrGbU697eIB0hwbK8XheUXSIQM5CruM'
 
 
+# ---------------------------------------------------------------------
+# Data Gathering Methods
+# ---------------------------------------------------------------------
 
 api = None
 HB = "------------------------------"
 
+# Reads seachtags from file
 def getSearchTags():
-    path = main.getDataPath(main.FILE_tag)
-    tags = set()
-    with open(path, "r") as file:
-        for line in file:
-            tags.add(line[:-1])
-    return tags
+    tags = main.loadFile(main.FILE_tag)
+    return set(tags)
 
+# Transforms the date to s string
 def translateDate(s):
     return s[-4:]+s[4:7]+s[8:10] #fixed string index's
 
-def readData(t):
-    ''' Code assistance: https://github.com/geduldig/TwitterAPI/blob/master/docs/ '''
+# Connects to twitter and starts collecting data
+# Automatically reconnects when disconnected.
+def readData(exitTread):
     global api
     api = TwitterAPI(consumer_key, consumer_secret, access_token_key, access_token_secret)
     searchTags = getSearchTags()
@@ -36,7 +49,7 @@ def readData(t):
     print(HB)
 
     timerCount = 1
-    while (t.isAlive()):
+    while (exitTread.isAlive()):
         try:
             r = api.request('statuses/filter', {'track':searchTags, 'language':{'en'}})
             iterator = r.get_iterator()
@@ -61,14 +74,13 @@ def readData(t):
                         wait(timerCount, r)
                         timerCount *= 2
                         break
-                if not t.isAlive():
+                if not exitTread.isAlive():
                     # program ended by user
                     break
         except ValueError:
             # something needs to be fixed before re-connecting
             raise 
         except TwitterRequestError as e:
-            '''statis codes: https://dev.twitter.com/streaming/overview/connecting'''
             if e.status_code == 420 or e.status_code == 503:
                 # temporary interruption, re-try request
                 wait(timerCount, r)
@@ -91,6 +103,7 @@ def readData(t):
     print("Stopping data retrieval...")
     print(HB)
 
+# sleeps a set amount of time
 def wait(timerCount, r):
     print(HB)
     print("Disconnected, attempting to reconnect in {} seconds...".format(str(timerCount*60 + 5)))
@@ -98,6 +111,7 @@ def wait(timerCount, r):
     r.close()
     sleep(timerCount*60 + 5)
 
+# prints status information when attempting to reconnect
 def printStatus(s):
     stat = (str(s) + " - good!") if (s == 200) else (str(s) + " - bad!")
     print("Status is: {}".format(stat))
@@ -106,9 +120,11 @@ def printStatus(s):
         print("Downloading Tweets...")
         print(HB)
 
+# Ends exitthread by input
 def getInput():
     input()
 
+# Starts the data gathering
 def startData():
     t = Thread(target = getInput)
     t2 = Thread(target = readData, args={t})

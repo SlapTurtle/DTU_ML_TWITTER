@@ -1,8 +1,17 @@
+# ---------------------------------------------------------------------
+# Imports
+# ---------------------------------------------------------------------
+import main
+
 import tensorflow as tf
 import numpy as np
 from collections import Counter
-import PythonApplication1 as main
 
+# ---------------------------------------------------------------------
+# Neural Network Methods
+# ---------------------------------------------------------------------
+
+# Transform the training set to match a lexicon with fixed indexes
 def make_Lexicon(allLines):
 	#upper,lower = 1000,50 #Optimize this
 	upper,lower = 45,3
@@ -22,11 +31,18 @@ def make_Lexicon(allLines):
 			retLex[word] = i
 			i += 1
 
-	#print(str(retLex))
-
 	return retLex
 
-def singleFeature(line, lexicon, classification):
+# Transforms training data into featuresets using a lexicon
+def makeFeatures(data, lexicon):
+	features = []
+	for line,clf in data:
+		type = [1,0,0] if clf==0 else [0,1,0] if clf==1  else [0,0,1]
+		features.append(singleFeature(line, type, lexicon))
+	return features
+
+# Transforms a single sentence into featureset using a lexicon
+def singleFeature(line, classification, lexicon):
 	feature = np.zeros(len(lexicon))
 	words = line.split(' ')
 	for word in words:
@@ -35,20 +51,16 @@ def singleFeature(line, lexicon, classification):
 			feature[index] += 1
 	return [feature, classification]
 
-def makeFeatures(data, lexicon):
-	features = []
-	for line,clf in data:
-		type = [1,0,0] if clf==0 else [0,1,0] if clf==1  else [0,0,1]
-		features.append(singleFeature(line, lexicon, type))
-	return features
-
+# Neural Network Parameters
 n_nodes_hl1 = 500
 n_nodes_hl2 = 500
 n_nodes_hl3 = 500
 
 n_classes = 3
 batch_size = 50
+epochCount = 10
 
+# Createas Neural Network Graph using the parameters
 def neural_network_model(data, size):
 	hidden_1_layer = {'weights':tf.Variable(tf.random_normal([size, n_nodes_hl1])),
 					  'biases':tf.Variable(tf.random_normal([n_nodes_hl1]))}
@@ -76,7 +88,8 @@ def neural_network_model(data, size):
 
 	return output
 
-def train_neural_network(train, test, epochCount):
+# Trains and tests a Neural Network Model
+def train_neural_network(train, test):
 	allLines = [row[0] for row in train]
 	lexicon = make_Lexicon(allLines)
 
@@ -99,7 +112,6 @@ def train_neural_network(train, test, epochCount):
 	optimizer = tf.train.AdamOptimizer().minimize(cost)
 
 	hm_epochs = epochCount
-	percent = 0
 	with tf.Session() as sess:
 		sess.run(tf.global_variables_initializer())
 
@@ -116,13 +128,11 @@ def train_neural_network(train, test, epochCount):
 
 				i += batch_size
 
-			#print('Epoch', epoch+1, 'completed out of',hm_epochs,'loss:',epoch_loss)
-
 		correct = tf.equal(tf.argmax(prediction, 1), tf.argmax(y, 1))
 
-		time_start = main.getTime()
 		accuracy = tf.reduce_mean(tf.cast(correct, 'float'))
+		time_start = main.getTime()
 		percent = accuracy.eval({x:test_x, y:test_y})
 		time_end = main.getTime()
-		#print("Neural time elapsed: " + str(time_end - time_start))
+		print("Neural test time elapsed: " + str(time_end - time_start))
 	return percent
