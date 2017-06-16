@@ -13,24 +13,19 @@ from collections import Counter
 
 # Transform the training set to match a lexicon with fixed indexes
 def make_Lexicon(allLines):
-	#upper,lower = 1000,50 #Optimize this
-	upper,lower = 45,3
-
+	upper,lower = 2000,30
 	retLex = dict()
 	tmpLex = []
-
 	for line in allLines:
 		words = line.replace('\n','').split(' ')
 		for word in words:
 			tmpLex.append(word)
-	
 	count = Counter(tmpLex)
 	i = 0
 	for word in count:
 		if upper > count[word] > lower:
 			retLex[word] = i
 			i += 1
-
 	return retLex
 
 # Transforms training data into featuresets using a lexicon
@@ -51,16 +46,21 @@ def singleFeature(line, classification, lexicon):
 			feature[index] += 1
 	return [feature, classification]
 
-# Neural Network Parameters
+# Number of Nodes in Hidden Layers
 n_nodes_hl1 = 500
 n_nodes_hl2 = 500
 n_nodes_hl3 = 500
 
+# Number of Classes
 n_classes = 3
+
+# Batch Size
 batch_size = 50
+
+# Number of Epochs
 epochCount = 10
 
-# Createas Neural Network Graph using the parameters
+# Createas Neural Network graph using the parameters
 def neural_network_model(data, size):
 	hidden_1_layer = {'weights':tf.Variable(tf.random_normal([size, n_nodes_hl1])),
 					  'biases':tf.Variable(tf.random_normal([n_nodes_hl1]))}
@@ -84,8 +84,8 @@ def neural_network_model(data, size):
 	l3 = tf.add(tf.matmul(l2,hidden_3_layer['weights']), hidden_3_layer['biases'])
 	l3 = tf.nn.relu(l3)
 
+	# Output Layer, 1 neuron
 	output = tf.matmul(l3,output_layer['weights']) + output_layer['biases']
-
 	return output
 
 # Trains and tests a Neural Network Model
@@ -108,13 +108,16 @@ def train_neural_network(train, test):
 
 	prediction = neural_network_model(x,size)
 
+	# Runs the Optmizer
 	cost = tf.reduce_mean( tf.nn.softmax_cross_entropy_with_logits(logits=prediction, labels=y) )
 	optimizer = tf.train.AdamOptimizer().minimize(cost)
 
+	# Runs a Session
 	hm_epochs = epochCount
 	with tf.Session() as sess:
 		sess.run(tf.global_variables_initializer())
 
+		# Iterate through all Epochs
 		for epoch in range(hm_epochs):
 			epoch_loss = 0
 			i = 0
@@ -130,9 +133,10 @@ def train_neural_network(train, test):
 
 		correct = tf.equal(tf.argmax(prediction, 1), tf.argmax(y, 1))
 
+		# Run tests and print results
 		accuracy = tf.reduce_mean(tf.cast(correct, 'float'))
 		time_start = main.getTime()
 		percent = accuracy.eval({x:test_x, y:test_y})
 		time_end = main.getTime()
-		print("Neural test time elapsed: " + str(time_end - time_start))
+		print("Neural Network test time elapsed: " + str(time_end - time_start))
 	return percent
