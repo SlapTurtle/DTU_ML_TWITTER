@@ -7,12 +7,19 @@ import re
 import nltk
 from string import digits
 
+# ---------------------------------------------------------------------
+# Parameters
+# ---------------------------------------------------------------------
 FILE = "2017May04"
 
 POSITIVES = set()
 NEGATIVES = set()
 NOISE = set()
 TAGS = set()
+
+# ---------------------------------------------------------------------
+# Pre-processing Methods
+# ---------------------------------------------------------------------
 
 # process generalised data-set
 def parseSet(file = "SentimentAnalysisDataset"):
