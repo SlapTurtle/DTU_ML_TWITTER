@@ -10,6 +10,10 @@ from collections import Counter
 # ---------------------------------------------------------------------
 # Neural Network Methods
 # ---------------------------------------------------------------------
+#	Code in this file is heavily based on educational material by
+#	Sentdex Analysis,
+#	www.sentdex.com,
+#	2017
 
 # Transform the training set to match a lexicon with fixed indexes
 def make_Lexicon(allLines):
